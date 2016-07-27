@@ -27,6 +27,7 @@ angular.module('chatApp')
     vm.noCamera = false;
     //client states
     vm.gumedia = true;      //is client capable of using getUserMedia?
+    vm.canCall = false;     //can client call another peer?
     vm.inCall = false;      //is client currently being called?
     vm.pids;                //Peer Ids of all connected clients 
     
@@ -223,7 +224,7 @@ angular.module('chatApp')
         if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
             console.log('ENTERED!!!')
             //change button access - able to hang up on the caller
-            vm.gumedia = true;
+            vm.canCall = false;
             vm.inCall = true;
             if (vm.picReady) {
                 vm.picSendReady = true;
@@ -249,7 +250,6 @@ angular.module('chatApp')
     function receiveLocalVideo() {
         if (navigator.mediaDevices.getUserMedia !== 'undefined') {
             //get the video stream
-            vm.gumedia = false;
             console.log('getUserMedia active');
             navigator.mediaDevices.getUserMedia({audio: true, video: true})
             .then(createStream)
@@ -258,6 +258,7 @@ angular.module('chatApp')
                 alert('getUserMedia error: ' + e.name);
             });
             console.log('AFTER STREAM');
+            vm.gumedia = false;
         } else {
             vm.noMedia = true;
             console.log('getUserMedia is not supported in this browser!');
@@ -385,7 +386,7 @@ angular.module('chatApp')
         console.log('Begin of new Peer Connection');
         if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
             //change button access
-            vm.gumedia = true;
+            vm.canCall = false;
             vm.inCall = true;
             if (vm.picReady) {
                 vm.picSendReady = true;
@@ -509,7 +510,7 @@ angular.module('chatApp')
         if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
             console.log('Started Call Answer');
             //change button access - able to hang up on the caller
-            vm.gumedia = true;
+            vm.canCall = false;
             vm.inCall = true;
             if (vm.picReady) {
                 vm.sendPicRe
@@ -556,7 +557,7 @@ angular.module('chatApp')
         console.log('Stopping peer connection');
         isStarted = false;
         isInitiator = false;
-        vm.gumedia = !vm.gumedia;
+        vm.canCall = true;
         vm.inCall = false;
         vm.picSendReady = false;
         //close the connection
@@ -739,10 +740,5 @@ angular.module('chatApp')
         photo.height = photoContextH = h;
         console.log('Height '+h+' Width '+w); 
     }
-    
-    var el = document.getElementById('server-time');
-    socket.on('time', function(timeString) {
-        el.innerHTML = 'Server time: ' + timeString;
-      });
 })
 })();

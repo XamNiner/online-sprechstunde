@@ -111,7 +111,7 @@
         <div class="col-md-8">
           <div>
             <input type="text" placeholder="Call user id..." ng-model="chat.peerId">
-            <button type="button" class="btn btn-primary" ng-click="chat.sendRequest()" ng-disabled="chat.gumedia">Call Peer</button>
+            <button type="button" class="btn btn-primary" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall">Call Peer</button>
             <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
         </div>  
         </div>
@@ -136,8 +136,6 @@
                 <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
             </ul>
         </div>
-        <h2>ServerTime</h2>
-        <p id='server-time'></p>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="lib/adapter.js"></script>

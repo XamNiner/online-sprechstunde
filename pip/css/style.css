@@ -1,0 +1,23 @@
+body    { padding-top:70px; }
+.container 
+.jumbotron{ 
+    border-radius:40px;
+    border-bottom: 0;
+}
+.navbar{
+    margin-bottom: : 50px !important;
+}
+
+.localVideo{
+    border: 2px solid red;
+    border-radius: 20px;
+    max-width: inherit;
+    max-height: inherit;
+}
+
+.table{
+    margin-bottom: 30px;
+    padding: 0;
+}
+
+
