@@ -259,6 +259,7 @@ angular.module('chatApp')
             });
             console.log('AFTER STREAM');
             vm.gumedia = false;
+            vm.canCall = true;
         } else {
             vm.noMedia = true;
             console.log('getUserMedia is not supported in this browser!');
