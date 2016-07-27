@@ -63,12 +63,12 @@
              <div class="jumbotron">
             <div class="embed-responsive embed-responsive-4by3">
                 <div ng-show="chat.canCall">
-                    <button type="button" style="position:absolute; top:50%; left:50%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>Call</button>
+                    <button type="button" style="position:absolute; top:50%; left:50%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()">Call</button>
                     
                    <div class="input-group">
                         <input type="text" class="form-control" placeholder="Call user id..." ng-model="chat.peerId">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Call</button>
+                            <button class="btn btn-primary" type="button" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall"><span class="glyphicon glyphicon-earphone"></span>Call</button>
                         </span>
                     </div><!-- /input-group -->
                 </div>
