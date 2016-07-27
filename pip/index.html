@@ -73,7 +73,9 @@
                 </div>
                 <div ng-show="chat.inCall">
                     <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
-                    <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
+                    </div>
                 </div>
             </div>
             <h2>Photo</h2>
