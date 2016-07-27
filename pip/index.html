@@ -31,7 +31,7 @@
                 <span style="display: inline-block;"></span>
           </ul>
             <ul class="nav navbar-nav navbar-right">
-                <!--Add dropdown menu as connection shortcut!-->
+            <!--Add dropdown menu as connection shortcut!-->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -41,7 +41,7 @@
                 <li><a href="#"><span class="glyphicon glyphicon-transfer"></span>Send File</a></li>
             </ul>
         </li>
-                <img src="asset/zollsoft--small.png" height="50">
+            <img src="asset/zollsoft--small.png" height="50">
             </ul>
         </div>
       </div>
@@ -72,6 +72,7 @@
                     </div><!-- /input-group -->
                 </div>
                 <div ng-show="chat.inCall">
+                    <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
                     <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
                 </div>
             </div>
@@ -119,11 +120,7 @@
         
     <div class="row">
         <div class="col-md-8">
-          <div>
-            <input type="text" placeholder="Call user id..." ng-model="chat.peerId">
-            <button type="button" class="btn btn-primary" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall">Call Peer</button>
             <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
-        </div>  
         </div>
     </div>    
     </div>
