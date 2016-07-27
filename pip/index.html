@@ -137,18 +137,14 @@
             </ul>
         </div>
         <h2>ServerTime</h2>
-    <p id='server-time'></p>
+        <p id='server-time'></p>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="lib/adapter.js"></script>
     <script src="app.js"></script>
     <script src="chat.js"></script>
-    
-    <script>
-      var socket = io();
-      var el = document.getElementById('server-time');
-      socket.on('time', function(timeString) {
-        el.innerHTML = 'Server time: ' + timeString;
-      });
-    </script>
+    <script src="chatDirective.js"></script>
+    <script src="scroll.js"></script>
+    <script src="socket.js"></script>
 </body>    
 </html>
