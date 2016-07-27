@@ -36,7 +36,6 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Set Peer Id</a></li>
-            <li><a href="#">Connect to Peer</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">Change Name</a></li>
                </ul>
@@ -63,7 +62,12 @@
         <div class="col-md-8 stackem">
              <div class="jumbotron">
             <div class="embed-responsive embed-responsive-4by3">
-                <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
+                <div ng-show="chat.canCall">
+                    <button type="button" style="position:absolute; top:25%; left:25%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()">Connect</button>
+                </div>
+                <div ng-show="chat.inCall">
+                    <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
+                </div>
             </div>
             <h2>Photo</h2>
             <canvas id="photo"></canvas>
