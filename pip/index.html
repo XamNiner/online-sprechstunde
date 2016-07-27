@@ -64,6 +64,13 @@
             <div class="embed-responsive embed-responsive-4by3">
                 <div ng-show="chat.canCall">
                     <button type="button" style="position:absolute; top:50%; left:50%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>Call</button>
+                    
+                   <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Call user id..." ng-model="chat.peerId">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Call</button>
+                        </span>
+                    </div><!-- /input-group -->
                 </div>
                 <div ng-show="chat.inCall">
                     <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
@@ -82,13 +89,6 @@
                 <div ng-show="chat.gumedia"> 
                     <button type="button" style="position:absolute; top:25%; left:25%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()">Start Camera</button>
                 </div>
-                <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-      <input type="text" class="form-control" placeholder="Search for...">
-    </div><!-- /input-group -->
-                
                 <div ng-show="!chat.gumedia">
                     <video id="localVideo" autoplay muted controls class="localVideo">Your Browser does not support video.</video>
                     <div class="btn-group btn-group-sm">
