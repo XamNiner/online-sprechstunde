@@ -48,11 +48,11 @@
     </nav>
     
     <div ng-controller="ChatCtrl as chat">
-    <div ng-show="chat.noMedia">
+    <div ng-cloak ng-show="chat.noMedia">
         <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
         </div>
     </div>
-    <div ng-show="chat.noCamera">
+    <div ng-cloak ng-show="chat.noCamera">
         <div class="alert alert-danger" role="alert">Access to camera was not granted. Please reload your browser and press allow when asked for permission!
         </div>
     </div>    
@@ -63,7 +63,7 @@
         <div class="col-md-8 stackem">
              <div class="jumbotron">
             <div class="embed-responsive embed-responsive-4by3">
-                <video id="remoteVideo" autoplay controls></video>  
+                <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
             </div>
             <h2>Photo</h2>
             <canvas id="photo"></canvas>
@@ -79,7 +79,7 @@
                     <button type="button" style="position:absolute; top:25%; left:25%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()">Start Camera</button>
                 </div>
                 <div ng-show="!chat.gumedia">
-                    <video id="localVideo" autoplay muted controls class="localVideo"></video>
+                    <video id="localVideo" autoplay muted controls class="localVideo">Your Browser does not support video.</video>
                     <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-primary" ng-click="chat.snapPhoto()" ng-disabled="!chat.canPhoto">Snap</button>
                         <button type="button" class="btn btn-primary" ng-click="chat.sendPhoto()" ng-disabled="!chat.picSendReady">Send Photo</button>
