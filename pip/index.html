@@ -13,7 +13,7 @@
 </head>
     
 <body>
-    
+    <div ng-controller="ChatCtrl as chat">
     <nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -29,14 +29,24 @@
                 <img src="asset/tomedo_logo.png" height="50"  style="display: inline-block;">
                 <span style="display: inline-block;"></span>
           </ul>
-            <ul class="nav navbar-nav navbar-right">
-            <!--Add dropdown menu as connection shortcut!-->
+        <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="#">Set Peer Id</a></li>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" placeholder="Id..." ng-model="chat.ownId">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" ng-click="chat.makeId()">Set Peer Id</button>
+                    </span>
+                </div><!-- /input-group -->
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Change Name</a></li>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" placeholder="Name..." ng-model="chat.newName">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" ng-click="chat.setName()">Set Name</button>
+                    </span>
+                </div><!-- /input-group -->
+                <li role="separator" class="divider"></li>
                 <li><a href="#"><span class="glyphicon glyphicon-transfer"></span>Send File</a></li>
             </ul>
         </li>
@@ -45,8 +55,7 @@
         </div>
       </div>
     </nav>
-    
-    <div ng-controller="ChatCtrl as chat">
+        
     <div ng-cloak ng-show="chat.noMedia">
         <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
         </div>
@@ -63,10 +72,10 @@
             <div class="jumbotron">
             <div class="embed-responsive embed-responsive-4by3">
                 <div ng-show="chat.canCall">
-                   <div class="input-group">
+                   <div class="input-group input-group-lg">
                         <input type="text" class="form-control" placeholder="Call user id..." ng-model="chat.peerId">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall"><span class="glyphicon glyphicon-earphone fa-2x"></span></button>
+                            <button class="btn btn-primary" type="button" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall"><span class="glyphicon glyphicon-earphone gi-3x" style="vertical-align:top"></span></button>
                         </span>
                     </div><!-- /input-group -->
                 </div>
@@ -77,12 +86,15 @@
                     </div>
                 </div>
             </div>
-            <h2>Photo</h2>
-            <canvas id="photo"></canvas>
+       <button type="button" class="btn btn-primary" ng-click="isCollapsed = !isCollapsed">Show Photos</button>
+	<hr>
+	<div uib-collapse="isCollapsed">
+        <canvas id="photo"></canvas>
             <div id="incoming">
-            <h2>Incoming Photos</h2>
+            <h3>Incoming Photos</h3>
             <div id="trail"></div>
             </div>
+	</div>
         </div>
         </div>
         <div class="col-md-4">
@@ -99,6 +111,8 @@
                 </div>
             </div>
             <br>
+            <p>Peer ID: {{chat.setId}}</p>
+            <p>Name: {{chat.name}}</p>
             <div>
             <form fix-bottom="chat" ng-submit="chat.addMessage()">
             <div id="chat" class="chatBox" style="height:310px; overflow-y:scroll">
@@ -121,11 +135,6 @@
     </div>
         <br>
         <br>
-        <div ng-show="!noMedia">
-            <input type="text" placeholder="Set your id..." ng-model="chat.ownId">
-            <button type="button" class="btn btn-primary" ng-click="chat.makeId()">Set Peer Id</button>
-        </div>
-        <p>Peer ID: {{chat.setId}}</p>
         <div>
             <h2>Usernames:</h2>
             <ul>
