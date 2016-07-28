@@ -72,7 +72,7 @@
             <div class="jumbotron">
             <div class="embed-responsive embed-responsive-4by3">
                 <div ng-show="chat.canCall">
-                   <div class="input-group input-group-lg">
+                   <div class="input-group input-group-lg text-center">
                         <input type="text" class="form-control" placeholder="Call user id..." ng-model="chat.peerId">
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall"><span class="glyphicon glyphicon-earphone gi-3x" style="vertical-align:top"></span></button>
@@ -83,12 +83,12 @@
                     <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
                     <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
+                        <button type="button" class="btn btn-primary" ng-click="chat.isCollapsed = !chat.isCollapsed">Show Photos</button>
                     </div>
                 </div>
             </div>
-       <button type="button" class="btn btn-primary" ng-click="isCollapsed = !isCollapsed">Show Photos</button>
 	<hr>
-	<div uib-collapse="isCollapsed">
+	<div uib-collapse="chat.isCollapsed">
         <canvas id="photo"></canvas>
             <div id="incoming">
             <h3>Incoming Photos</h3>
@@ -111,8 +111,11 @@
                 </div>
             </div>
             <br>
-            <p>Peer ID: {{chat.setId}}</p>
-            <p>Name: {{chat.name}}</p>
+            
+            <div class="panel panel-primary porim" ng-cloak>
+                <p><b>Peer ID:</b> {{chat.setId}}</p>
+                <p><b>Name:</b> {{chat.name}}</p>
+            </div>
             <div>
             <form fix-bottom="chat" ng-submit="chat.addMessage()">
             <div id="chat" class="chatBox" style="height:310px; overflow-y:scroll">

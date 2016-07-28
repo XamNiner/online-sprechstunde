@@ -40,6 +40,7 @@ angular.module('chatApp')
     vm.ownId;   //set last id numbers yourself 
     vm.setId = praxis+''+vm.name+''+42; //standard
     vm.accepted = false; //has client answered a peer request?
+    vm.isCollapsed = true;
     
     //Id of the other peer
     vm.partnerId;

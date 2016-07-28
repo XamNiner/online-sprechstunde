@@ -1,4 +1,6 @@
-body    { padding-top:70px; }
+body{ 
+    padding-top:70px; 
+}
 .container 
 .jumbotron{ 
     border-radius:40px;
@@ -25,3 +27,12 @@ body    { padding-top:70px; }
 }
 
 
+.bottomleft {
+    position:absolute; bottom:0px;  margin-bottom:7px; left: 0px;
+}
+
+.porim {
+    border-width: medium;
+    font-size: 20px;
+    padding-left: 5px;
+}
