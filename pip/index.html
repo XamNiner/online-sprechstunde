@@ -47,7 +47,11 @@
                     </span>
                 </div><!-- /input-group -->
                 <li role="separator" class="divider"></li>
-                <li><a href="#"><span class="glyphicon glyphicon-transfer"></span>Send File</a></li>
+                <div class="form-group">
+                <label for="exampleInputFile"><span class="glyphicon glyphicon-transfer"></span>Send File</label>
+                <input type="file" ng-model="chat.transferFile">
+                    <button type="button" class="btn btn-primary" ng-click="chat.sendFile()">Send</button>
+                </div>
             </ul>
         </li>
             <img src="asset/zollsoft--small.png" height="50">
