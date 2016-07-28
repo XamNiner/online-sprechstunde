@@ -139,6 +139,24 @@
                 <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
             </ul>
         </div>
+        
+        <input type="checkbox" ng-model="showDialog"> Show
+    <div modal-show="showDialog" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body&hellip;</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="lib/adapter.js"></script>
@@ -146,6 +164,7 @@
     <script src="chat.js"></script>
     <script src="chatDirective.js"></script>
     <script src="scroll.js"></script>
+    <script src="modal.js"></script>
     <script src="socket.js"></script>
 </body>    
 </html>
