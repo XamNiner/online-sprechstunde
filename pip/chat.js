@@ -430,7 +430,7 @@ angular.module('chatApp')
     function createPeerConnection(){
         try {
             console.log('>>>>>> creating peer connection');
-            pc = new RTCPeerConnection(null);
+            pc = new RTCPeerConnection(pcConfig, sdpConstraints);
             
             //add event handler
             pc.onicecandidate = handleIceCandidate;
