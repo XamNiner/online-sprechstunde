@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('chatApp')
-.controller('ChatCtrl', function($scope, socket) {
+.controller('ChatCtrl', function($scope, socket, modalService) {
     //view model to encapsulate $scope using controllerAs
     var vm = this;
     vm.messages = [];
@@ -158,17 +158,23 @@ angular.module('chatApp')
                 console.log('<<<<<<<<<<<request end')
                 console.log('Client with id - '+data.sender+' refused the connection.');
                 //display refusal
-                window.alert('Client refused your connection! Please try again.');
+                modalOptions.headerText = 'Client refused your request';
+                modalOptions.bodyText = 'Please try again.';
+                modalService.showModal({}, modalOptions);
             } else if (data.message === 'in:call') {
                 console.log('<<<<<<<<<<<request end');
                 console.log('Requested client is in another call!');
                 //display warning
-                window.alert('The requested Client is currently in another call. Please try again later.');
+                modalOptions.headerText = 'Requested Client is currently in another call';
+                modalOptions.bodyText = 'Please try later or call another peer Id.';
+                modalService.showModal({}, modalOptions);
             } else if (data.message === 'not:ready') {
                 console.log('<<<<<<<<<<<request end');
                 console.log('The requested client is not ready to establish a p2p connection.');
                 //display warning
-                window.alert('The requested client is not yet ready to establish a connection. Please try again later.');
+                modalOptions.headerText = 'Requested Client is not yet ready for a call';
+                modalOptions.bodyText = 'Please try later or call another peer Id.';
+                modalService.showModal({}, modalOptions);
             } else if (data.message === 'bye' && isStarted) {
                 handleRemoteHangup();
             } else {
@@ -294,6 +300,14 @@ angular.module('chatApp')
         socket.emit('update:pid', vm.setId);
     }
     
+    //control modal messages
+    var modalOptions = {
+                closeButtonText: 'Cancel',
+                actionButtonText: 'Ok',
+                headerText: 'Standard header',
+                bodyText: 'Standard body.'
+            };
+    
     //request a peer connection from another client
     function sendRequest() {
         console.log('sending request to establish peer connection');
@@ -312,35 +326,44 @@ angular.module('chatApp')
             console.log('Value in peerId '+vm.peerId);   
         } else {
             console.log('You requested yourself');
-            window.alert("You requested a connection with yourself. Please choose another peer Id.");
+            modalOptions.headerText = 'Alert: Connection with yourself';
+            modalOptions.bodyText = 'Please choose another peer Id.';
+            modalService.showModal({}, modalOptions);
         }
     }
     
     function startRequest(data) {
         if (isChannelReady && !vm.inCall) {
-            var p = window.confirm("Peer Id: "+data.sender+" requests a peer connection. Accept?");
-            if (p == true) {
-                //accepted
-                console.log('Accepted the other clients request!');
-                //accepting the peers call
-                var answer = {
-                    sender: data.receiver,
-                    receiver: data.sender,
-                    message: 'answered'
-                };
-                //send answer to caller
-                sendPrivateMessage(answer);
-            } else {
-                //refused connection
-                console.log('Denied the other clients request!');
-                //send refusal back to sender
-                var denied = {
-                    sender: data.receiver,
-                    receiver: data.sender,
-                    message: 'denied'
-                };
-                sendPrivateMessage(denied);
-            }    
+            modalOptions.headerText = 'Connection request from Peer '+data.sender;
+            modalOptions.bodyText = 'Accept peer2peer connection?';
+            modalOptions.actionButtonText = 'Accept';
+            modalOptions.closeButtonText = 'Decline';
+            modalOptions.okResult = 'Accepted'
+            modalService.showModal({}, modalOptions).then(function(result) {
+                console.log('The result: '+result);
+                if (result === 'Accepted') {
+                    //accepted
+                    console.log('Accepted the other clients request!');
+                    //accepting the peers call
+                    var answer = {
+                        sender: data.receiver,
+                        receiver: data.sender,
+                        message: 'answered'
+                    };
+                    //send answer to caller
+                    sendPrivateMessage(answer);
+                } else {
+                    //refused connection
+                    console.log('Denied the other clients request!');
+                    //send refusal back to sender
+                    var denied = {
+                        sender: data.receiver,
+                        receiver: data.sender,
+                        message: 'denied'
+                    };
+                    sendPrivateMessage(denied);
+                } 
+            });  
         } else if (isChannelReady && vm.inCall){
             console.log('Another peer called while in p2p call Id: '+data.sender);
             var inCall = {
