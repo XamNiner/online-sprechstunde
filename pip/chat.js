@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('chatApp')
-.controller('ChatCtrl', function($scope, socket) {
+.controller('ChatCtrl', function($scope, socket, $dialog, $timeout) {
     //view model to encapsulate $scope using controllerAs
     var vm = this;
     vm.messages = [];
@@ -741,5 +741,8 @@ angular.module('chatApp')
         photo.height = photoContextH = h;
         console.log('Height '+h+' Width '+w); 
     }
+    $timeout(function(){
+    $dialog.dialog({}).open('modal.html');  
+  }, 3000);  
 })
 })();
