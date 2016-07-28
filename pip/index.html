@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dru">
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" placeholder="Id..." ng-model="chat.ownId">
                     <span class="input-group-btn">
@@ -47,11 +47,13 @@
                     </span>
                 </div><!-- /input-group -->
                 <li role="separator" class="divider"></li>
-                <div class="form-group">
-                <label for="exampleInputFile"><span class="glyphicon glyphicon-transfer"></span>Send File</label>
-                <input type="file" ng-model="chat.transferFile">
-                    <button type="button" class="btn btn-primary" ng-click="chat.sendFile()">Send</button>
-                </div>
+
+                <div class="input-group input-group">
+                    <input type="file" class="form-control" ng-model="chat.newName">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-block" ng-click="chat.sendFile()"><span class="glyphicon glyphicon-transfer"></span>Send</button>
+                    </span>
+                </div><!-- /input-group -->
             </ul>
         </li>
             <img src="asset/zollsoft--small.png" height="50">
@@ -84,7 +86,7 @@
                     </div><!-- /input-group -->
                 </div>
                 <div ng-show="chat.inCall">
-                    <video id="remoteVideo" autoplay controls>Your Browser does not support video.</video>  
+                    <video id="remoteVideo" autoplay controls class="remoteVideo">Your Browser does not support video.</video>  
                     <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall">End Call</button>
                         <button type="button" class="btn btn-primary" ng-click="chat.isCollapsed = !chat.isCollapsed">Show Photos</button>
@@ -154,6 +156,8 @@
                 <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
             </ul>
         </div>
+        <h2>IMAGE</h2>
+        <img ng-src="{{chat.snapImg}}">
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="lib/adapter.js"></script>

@@ -633,6 +633,7 @@ angular.module('chatApp')
         adjustCanvasSize(localVideo);
         photoContext.drawImage(localVideo, 0, 0, photo.width, photo.height);
         vm.picReady = true;
+        //vm.snapImg = photoContext.getImageData();
         if (vm.inCall) {
             vm.picSendReady = true;
         }
@@ -742,6 +743,8 @@ angular.module('chatApp')
       };
     }
     
+    vm.snapImg;
+    
     //receiving photo data through the rtc data channel
     function renderPhoto(data) {
         adjustCanvasSize(remoteVideo);
@@ -755,7 +758,7 @@ angular.module('chatApp')
         var context = canvas.getContext('2d');
         var img = context.createImageData(photoContextW, photoContextH);
         img.data.set(data);
-        context.putImageData(img, 0, 0);    
+        context.putImageData(img, 0, 0);   
     }
     
     function adjustCanvasSize(video) {

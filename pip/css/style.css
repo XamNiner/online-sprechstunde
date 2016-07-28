@@ -17,6 +17,13 @@ body{
     max-height: inherit;
 }
 
+.remoteVideo{
+    border: 2px solid red;
+    border-radius: 20px;
+    max-width: inherit;
+    max-height: inherit;
+}
+
 .table{
     margin-bottom: 30px;
     padding: 0;
@@ -35,4 +42,9 @@ body{
     border-width: medium;
     font-size: 20px;
     padding-left: 5px;
+}
+
+.dru {
+
+    width: 300%; 
 }
