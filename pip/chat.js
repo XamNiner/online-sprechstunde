@@ -758,7 +758,14 @@ angular.module('chatApp')
         img.data.set(data);
         context.putImageData(img, 0, 0); 
         var urls = canvas.toDataURL();
-        vm.imgContainer.push(urls);
+        var ndate = new Date();
+        var setting = ndate.getFullYear() + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' + ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
+        console.log('Current time : ' + setting);
+        var data = {
+            url: urls,
+            time: setting
+        }
+        vm.imgContainer.push(data);
         //make sure all thumbnails are being rendered on the site
         $scope.$digest();
         console.log('This is the container size: '+vm.imgContainer.length);
