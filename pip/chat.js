@@ -612,7 +612,6 @@ angular.module('chatApp')
     //capture a picture and send it over the RTC data channel
     //-----------------------------------------------------------------
     var photo = document.getElementById('photo');
-    var trail = document.getElementById('trail');
     var photoContext = photo.getContext('2d'); 
     //set picture dimensions
     var photoContextW,
@@ -625,6 +624,9 @@ angular.module('chatApp')
     vm.canPhoto = false;
     vm.picReady = false;
     vm.picSendReady = false;
+    vm.snapImg;
+    //container holding image data
+    vm.imgContainer = [];
     
     vm.snapPhoto = snapPhoto;
     vm.sendPhoto = sendPhoto;
@@ -632,8 +634,9 @@ angular.module('chatApp')
     function snapPhoto() {
         adjustCanvasSize(localVideo);
         photoContext.drawImage(localVideo, 0, 0, photo.width, photo.height);
+        var url = photo.toDataURL();
+        vm.snapImg = url;
         vm.picReady = true;
-        //vm.snapImg = photoContext.getImageData();
         if (vm.inCall) {
             vm.picSendReady = true;
         }
@@ -743,8 +746,6 @@ angular.module('chatApp')
       };
     }
     
-    vm.snapImg;
-    
     //receiving photo data through the rtc data channel
     function renderPhoto(data) {
         adjustCanvasSize(remoteVideo);
@@ -752,13 +753,15 @@ angular.module('chatApp')
         canvas.width = photoContextW;
         canvas.height = photoContextH;
         canvas.classList.add('incomingPhoto');
-        // trail is the element holding the incoming images
-        trail.insertBefore(canvas, trail.firstChild);
-
         var context = canvas.getContext('2d');
         var img = context.createImageData(photoContextW, photoContextH);
         img.data.set(data);
-        context.putImageData(img, 0, 0);   
+        context.putImageData(img, 0, 0); 
+        var urls = canvas.toDataURL();
+        vm.imgContainer.push(urls);
+        //make sure all thumbnails are being rendered on the site
+        $scope.$digest();
+        console.log('This is the container size: '+vm.imgContainer.length);
     }
     
     function adjustCanvasSize(video) {

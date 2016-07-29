@@ -13,7 +13,7 @@
 </head>
     
 <body>
-    <div ng-controller="ChatCtrl as chat">
+<div ng-controller="ChatCtrl as chat">
     <nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -62,6 +62,7 @@
       </div>
     </nav>
         
+ <!--------COMPATIBILITY ERROR!-------->       
     <div ng-cloak ng-show="chat.noMedia">
         <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
         </div>
@@ -71,7 +72,7 @@
         </div>
     </div>    
     
-    <!--Row for camera display and chat!-->    
+<!--------REMOTE VIDEO!-------->   
     <div class="container" ng-cloak ng-show="!chat.noMedia">
     <div class="row">
         <div class="col-md-8 stackem">
@@ -93,16 +94,73 @@
                     </div>
                 </div>
             </div>
-	<hr>
-	<div uib-collapse="chat.isCollapsed">
-        <canvas id="photo"></canvas>
-            <div id="incoming">
-            <h3>Incoming Photos</h3>
-            <div id="trail"></div>
+	       <hr>
+<!--------Photo Display!-------->
+        <div class="row">
+        <div uib-collapse="chat.isCollapsed">
+            <div ng-hide="!chat.gumedia">
+                <canvas id="photo"></canvas>
             </div>
-	</div>
+        <div class="col-md-3">
+            <p>Snapshot</p>
+            <div class="dropdown thumbs"> 
+            <img ng-src="{{chat.snapImg}}" class="img-responsive thumbnail" alt="test" width="100" height="100">
+            <div class="dropdown-content thumbs-content">
+                <img ng-src="{{chat.snapImg}}" class="img-responsive thumbnail" alt="test" width="640" height="480">
+            <div class="desc">Snapshot</div>
+            </div>
         </div>
         </div>
+        <div class="col-md-9">
+        <div id="incoming">
+            <p>Session Photos</p>
+            <div ng-repeat="nails in chat.imgContainer track by $index" ng-switch="$index%4">
+                <div class="row" ng-switch-when="0">
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index]}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index]}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">Test image</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+1]}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+1]}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">Test image</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+2]}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+2]}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">Test image</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+3]}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+3]}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">Test image</div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+	    </div>
+        </div>
+        </div>
+        </div>
+<!--------LOCAL VIDEO!-------->
         <div class="col-md-4">
             <div class="embed-responsive embed-responsive-4by3">
                 <div ng-show="chat.gumedia"> 
@@ -117,7 +175,7 @@
                 </div>
             </div>
             <br>
-            
+<!--------Info Panel!-------->        
             <div class="panel panel-primary porim" ng-cloak>
                 <p><b>Peer ID:</b> {{chat.setId}}</p>
                 <p><b>Name:</b> {{chat.name}}</p>
@@ -142,23 +200,22 @@
         </div>
     </div>   
     </div>
-        <br>
-        <br>
-        <div>
-            <h2>Usernames:</h2>
-            <ul>
-                <li ng-repeat="user in chat.userNames track by $index">{{user}}</li>
-            </ul>
-        </div>
-        <div>
-            <h2>Peer Ids:</h2>
-            <ul>
-                <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
-            </ul>
-        </div>
-        <h2>IMAGE</h2>
-        <img ng-src="{{chat.snapImg}}">
+    <br>
+    <br>
+<!--------Ids and Usernames!-------->        
+    <div>
+        <h2>Usernames:</h2>
+        <ul>
+            <li ng-repeat="user in chat.userNames track by $index">{{user}}</li>
+        </ul>
     </div>
+    <div>
+        <h2>Peer Ids:</h2>
+        <ul>
+            <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
+        </ul>
+    </div>
+</div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="lib/adapter.js"></script>
     <script src="ui-bootstrap-tpls.min.js"></script>
