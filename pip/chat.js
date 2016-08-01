@@ -95,7 +95,8 @@ angular.module('chatApp')
         if (data.name === vm.name) {
             vm.setId = data.id;
             vm.pids = data.pids;
-        }    
+        }  
+        socket.emit('update:pid', vm.setId);
     });
     
     //listen for chat updates from the server
@@ -690,6 +691,49 @@ angular.module('chatApp')
         }
     }
     
+    //sending specific files from one client to another
+    vm.sendFile = sendFile;
+    vm.newFile;
+    vm.fname;
+    vm.transferFile;
+
+    vm.upload = function(event) {
+        var files = event.target.files;
+        console.log('The new file: '+files[0].size);
+        console.log('Name of the data: '+files[0].name);
+        vm.fname = files[0].name;
+        console.log(vm.fname);
+        $scope.$digest();
+        vm.transferFile = files[0];
+    };
+    
+    function sendFile() {
+        var CHUNK_LEN = 64000;          //64KB Chunks
+        var file = vm.transferFile,     //file to be  transfered
+            len = file.size,            //file size
+            n = len / CHUNK_LEN | 0;    //number of chunks
+        console.log('This is the byte lenght of the file: '+len);
+        if (vm.inCall && vm.transferFile.size >= 0) {
+           //sending data
+            console.log('Sending a file with a length of '+len);
+            dataChannel.send(len);
+            
+            //send individual chunks
+            for (var i = 0; i < n; i++) {
+                var start = i * CHUNK_LEN,
+                    end = (i + 1) * CHUNK_LEN;
+                console.log(start+' - '+ (end - 1));
+                dataChannel.send(file.subarray(start, end));
+            }
+            
+            //send any rest
+            if (len % CHUNK_LEN) {
+                console.log('last '+len % CHUNK_LEN+' bytes');
+                dataChannel.send(file.subarray(n * CHUNK_LEN));
+            }
+        }
+    } 
+    
     //create the data channel to send images
     function onDataChannelCreated(channel) {
         console.log('Created Data Channel:', channel);
@@ -780,10 +824,10 @@ angular.module('chatApp')
         //display all transfered images as thumbnails with attached time codes
         var urls = canvas.toDataURL();
         var ndate = new Date();
-        var setting = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
+        var timeStamp = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
         var data = {
             url: urls,
-            time: setting
+            time: timeStamp
         }
         vm.imgContainer.push(data);
         //make sure all thumbnails are being rendered on the site
@@ -797,6 +841,6 @@ angular.module('chatApp')
         photo.width = photoContextW = w;
         photo.height = photoContextH = h;
         console.log('Height '+h+' Width '+w); 
-    } 
+    }  
 })
 })();

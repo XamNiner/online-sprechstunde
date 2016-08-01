@@ -49,11 +49,15 @@
                 <li role="separator" class="divider"></li>
 
                 <div class="input-group input-group">
-                    <input type="file" class="form-control" ng-model="chat.newFile">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary btn-block" ng-click="chat.sendFile()"><span class="glyphicon glyphicon-transfer"></span>Send</button>
-                    </span>
+                    <label class="input-group-btn">
+                        <span class="btn btn-primary">
+                            <span class="glyphicon glyphicon-folder-open"></span> <input type="file" style="display: none;" multiple custom-on-change="chat.upload">
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" readonly placeholder="<filename>" ng-model="chat.fname">
                 </div><!-- /input-group -->
+                 <li role="separator" class="divider"></li>
+                <button type="button" class="btn btn-primary btn-block" ng-click="chat.sendFile()" ng-disabled="!chat.inCall"><span class="glyphicon glyphicon-transfer"></span>Send</button>
             </ul>
         </li>
             <img src="asset/zollsoft--small.png" height="50">
@@ -223,8 +227,8 @@
     <script src="chat.js"></script>
     <script src="chatDirective.js"></script>
     <script src="scroll.js"></script>
-    <script src="modal.js"></script>
     <script src="socket.js"></script>
     <script src="modalService.js"></script>
+    <script src="customOnChange.js"></script>
 </body>    
 </html>
