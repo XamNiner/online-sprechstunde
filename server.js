@@ -57,8 +57,7 @@ io.on('connection', function (socket) {
         socket.username = username;
         
         //add client name to list of users
-        var zu = username+' - SocketID: '+socket.id;
-        usernames[username] = zu;
+        usernames[username] = username;
         io.sockets.emit('update:user', usernames);
         io.sockets.emit('get:pid', peerIds);
         //set the standard room
@@ -74,6 +73,19 @@ io.on('connection', function (socket) {
         socket.broadcast.to('room1').emit('update:chat', 'SERVER', username + ' has connected with ip: '+address);
         socket.emit('update:rooms', rooms, 'room1');
     });
+    
+    //change username
+    socket.on('newname:user', function(data) {
+        console.log('Changing the name');
+        log('The new name: ', data.newName);
+        log('The old name: ', data.oldName);
+        usernames[socket.username] = data.newName;
+        //set new name for socket
+        socket.username = data.newName;
+        //inform other peers that user changed his name
+        socket.broadcast.emit('update:chat', 'SERVER', data.oldName + ' has changed name to '+ socket.username);
+        io.sockets.emit('update:user', usernames);
+    })
     
     //clients send a new message
     socket.on('send:msg', function(data) {

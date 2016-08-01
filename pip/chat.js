@@ -210,10 +210,21 @@ angular.module('chatApp')
     });
     
     //-----------------------------------------------------------------
-    //send text messages to clients in the same room
+    //change the user name
     //-----------------------------------------------------------------
+    vm.newName;
+    vm.setName = setName;
     
-    
+    function setName() {
+        console.log('Setting new name!')
+        var oldName = vm.name;
+        vm.name = vm.newName;
+        var data = {
+            oldName: oldName,
+            newName: vm.newName
+        }
+        socket.emit('newname:user', data);
+    }
     //-----------------------------------------------------------------
     //sending messages to all clients
     //-----------------------------------------------------------------
@@ -756,11 +767,12 @@ angular.module('chatApp')
         var context = canvas.getContext('2d');
         var img = context.createImageData(photoContextW, photoContextH);
         img.data.set(data);
-        context.putImageData(img, 0, 0); 
+        context.putImageData(img, 0, 0);
+        
+        //display all transfered images as thumbnails with attached time codes
         var urls = canvas.toDataURL();
         var ndate = new Date();
-        var setting = ndate.getFullYear() + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' + ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
-        console.log('Current time : ' + setting);
+        var setting = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
         var data = {
             url: urls,
             time: setting
