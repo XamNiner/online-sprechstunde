@@ -40,6 +40,7 @@ setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 io.on('connection', function (socket) {
     var address = socket.handshake.address;
     var id = 12;
+    var praxis = 'pr23';
     
     //logging server events
     function log() {
@@ -72,6 +73,16 @@ io.on('connection', function (socket) {
         //tell members of room one that a new client has connected
         socket.broadcast.to('room1').emit('update:chat', 'SERVER', username + ' has connected with ip: '+address);
         socket.emit('update:rooms', rooms, 'room1');
+        //set initial peer id for the new client
+        var peerId = praxis+''+username+''+socket.id.substring(2,6);
+        peerIds[peerId] = peerId;
+        socket.pid = peerId;
+        var data = {
+            name: username,
+            id: peerId,
+            pids: peerIds
+        }
+        socket.emit('init:peerId', data);
     });
     
     //change username
@@ -79,9 +90,11 @@ io.on('connection', function (socket) {
         console.log('Changing the name');
         log('The new name: ', data.newName);
         log('The old name: ', data.oldName);
-        usernames[socket.username] = data.newName;
+         delete usernames[socket.username];
+        usernames[data.newName] = data.newName;
         //set new name for socket
         socket.username = data.newName;
+        console.log('Socket name '+socket.username);
         //inform other peers that user changed his name
         socket.broadcast.emit('update:chat', 'SERVER', data.oldName + ' has changed name to '+ socket.username);
         io.sockets.emit('update:user', usernames);
@@ -141,16 +154,12 @@ io.on('connection', function (socket) {
         //update username list
         io.sockets.emit('update:user', usernames);
         userNumber--;
-        
         //delete the peer id 
         delete peerIds[socket.pid];
         //update the peer id list
         io.sockets.emit('get:pid', peerIds);
         //global text echo that user left
         socket.broadcast.emit('update:chat', 'SERVER', socket.username + ' has disconnected.');
-        
-        //hangup on a call associated with the quitting peer
-        //socket.broadcast.emit('message', 'bye');
         socket.leave(socket.room);
     });
     

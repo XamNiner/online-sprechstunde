@@ -90,6 +90,14 @@ angular.module('chatApp')
         socket.emit('add:user', vm.name);
     });
     
+    //set the initial peer Id
+    socket.on('init:peerId', function(data) {
+        if (data.name === vm.name) {
+            vm.setId = data.id;
+            vm.pids = data.pids;
+        }    
+    });
+    
     //listen for chat updates from the server
     socket.on('update:chat', function(username, data) {
         var msg = {
