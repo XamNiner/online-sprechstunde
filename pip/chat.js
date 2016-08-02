@@ -3,9 +3,10 @@
 'use strict';
 
 angular.module('chatApp')
-.controller('ChatCtrl', function($scope, socket, modalService) {
+.controller('ChatCtrl', function($scope, socket, modalService, photoService, signalingService) {
     //view model to encapsulate $scope using controllerAs
     var vm = this;
+    
     vm.messages = [];
     vm.message;
     
@@ -298,14 +299,8 @@ angular.module('chatApp')
         localVideo.src = window.URL.createObjectURL(stream);
         localStream = stream;
         console.log('The local stream has been initialized: '+localStream);
-        //sendMessage('got user media');
-        //set photo dimensions
-        //localVideo.onloadmetadata = function() {
-        //}
-        //got local stream --> can begin calling other peers
         isChannelReady = true;
     }
-    
     
     //-----------------------------------------------------------------
     //request a new peer connection
@@ -334,17 +329,9 @@ angular.module('chatApp')
         console.log('sending request to establish peer connection');
         var message = 'request';
         console.log('Check - '+vm.setId+' - '+vm.peerId);
-        //dont request yourself
+        //dont request yourself!
         if (vm.peerId !== vm.setId) {
-            var a = vm.setId,
-            b = vm.peerId,
-            data = {
-                sender: a,
-                receiver: b,
-                message: message
-            };
-            sendPrivateMessage(data);
-            console.log('Value in peerId '+vm.peerId);   
+            signalingService.sendRequest(vm.setId, vm.peerId, message, socket);
         } else {
             console.log('You requested yourself');
             modalOptions.headerText = 'Alert: Connection with yourself';
@@ -361,29 +348,7 @@ angular.module('chatApp')
             modalOptions.closeButtonText = 'Decline';
             modalOptions.okResult = 'Accepted'
             modalService.showModal({}, modalOptions).then(function(result) {
-                console.log('The result: '+result);
-                if (result === 'Accepted') {
-                    //accepted
-                    console.log('Accepted the other clients request!');
-                    //accepting the peers call
-                    var answer = {
-                        sender: data.receiver,
-                        receiver: data.sender,
-                        message: 'answered'
-                    };
-                    //send answer to caller
-                    sendPrivateMessage(answer);
-                } else {
-                    //refused connection
-                    console.log('Denied the other clients request!');
-                    //send refusal back to sender
-                    var denied = {
-                        sender: data.receiver,
-                        receiver: data.sender,
-                        message: 'denied'
-                    };
-                    sendPrivateMessage(denied);
-                } 
+                signalingService.handleRequest(data, result, socket);
             });  
         } else if (isChannelReady && vm.inCall){
             console.log('Another peer called while in p2p call Id: '+data.sender);
@@ -392,7 +357,7 @@ angular.module('chatApp')
                 receiver: data.sender,
                 message: 'in:call'
             };
-            sendPrivateMessage(inCall);
+            signalingService.sendPrivateMessage(socket, incall);
         } else {
             console.log('Not ready while being called by peer Id: '+data.sender);
             var notReady = {
@@ -400,16 +365,11 @@ angular.module('chatApp')
                 receiver: data.sender,
                 message: 'not:ready'
             }
-            sendPrivateMessage(notReady);
+            signalingService.sendPrivateMessage(socket, notReady);
         }  
     }
     
-    //emitting private message to another peer
-    function sendPrivateMessage(data) {
-        console.log('Sender id: '+data.sender+' and Receiver id: '+data.receiver);
-        console.log('Sending private message: '+ data.message);
-        socket.emit('private:msg', data);
-    }
+
     
     //-----------------------------------------------------------------
     //begin to establish peer connection
@@ -589,7 +549,7 @@ angular.module('chatApp')
             receiver: vm.partnerId,
             message: 'bye'
         }
-        sendPrivateMessage(quitData);
+        signalingService.sendPrivateMessage(socket, quitData);
     };
     
     //the caller has ended the call
@@ -625,7 +585,7 @@ angular.module('chatApp')
             receiver: vm.partnerId,
             message: 'bye'
         }
-        sendPrivateMessage(quitData);
+        signalingService.sendPrivateMessage(socket, quitData);
     }
     
     //-----------------------------------------------------------------
@@ -652,10 +612,7 @@ angular.module('chatApp')
     vm.sendPhoto = sendPhoto;
     
     function snapPhoto() {
-        adjustCanvasSize(localVideo);
-        photoContext.drawImage(localVideo, 0, 0, photo.width, photo.height);
-        var url = photo.toDataURL();
-        vm.snapImg = url;
+        vm.snapImg = photoService.snap(localVideo, photo, photoContext);
         vm.picReady = true;
         if (vm.inCall) {
             vm.picSendReady = true;
@@ -665,33 +622,12 @@ angular.module('chatApp')
     function sendPhoto() {
         //check if in call and a photo is available
         if (vm.picReady && vm.inCall) {
-            //split data in 64KB chunks
-            var CHUNK_LEN = 64000;
-            var img = photoContext.getImageData(0, 0, photoContextW, photoContextH),
-                len = img.data.byteLength,  //number of bytes to send
-                n = len / CHUNK_LEN | 0;    //number of chunks
-            
-            console.log('Sending a total of '+len+' bytes');
-            //send image data
-            dataChannel.send(len);
-            
-            //send individual chunks
-            for (var i = 0; i < n; i++) {
-                var start = i * CHUNK_LEN,
-                    end = (i + 1) * CHUNK_LEN;
-                console.log(start+' - '+ (end - 1));
-                dataChannel.send(img.data.subarray(start, end));
-            }
-            
-            //send any rest
-            if (len % CHUNK_LEN) {
-                console.log('last '+len % CHUNK_LEN+' bytes');
-                dataChannel.send(img.data.subarray(n * CHUNK_LEN));
-            }
+           photoService.sendPhoto(photo, photoContext, dataChannel);
         }
     }
-    
+    //----------------------------------------------------
     //sending specific files from one client to another
+    //----------------------------------------------------
     vm.sendFile = sendFile;
     vm.newFile;
     vm.fname;
@@ -703,10 +639,12 @@ angular.module('chatApp')
         console.log('Name of the data: '+files[0].name);
         vm.fname = files[0].name;
         console.log(vm.fname);
+        //update the filename 
         $scope.$digest();
         vm.transferFile = files[0];
     };
     
+    //WORK IN PROGRESS
     function sendFile() {
         var CHUNK_LEN = 64000;          //64KB Chunks
         var file = vm.transferFile,     //file to be  transfered
@@ -733,8 +671,9 @@ angular.module('chatApp')
             }
         }
     } 
-    
+     //----------------------------------------------------
     //create the data channel to send images
+     //----------------------------------------------------
     function onDataChannelCreated(channel) {
         console.log('Created Data Channel:', channel);
 
@@ -811,36 +750,11 @@ angular.module('chatApp')
     
     //receiving photo data through the rtc data channel
     function renderPhoto(data) {
-        adjustCanvasSize(remoteVideo);
-        var canvas = document.createElement('canvas');
-        canvas.width = photoContextW;
-        canvas.height = photoContextH;
-        canvas.classList.add('incomingPhoto');
-        var context = canvas.getContext('2d');
-        var img = context.createImageData(photoContextW, photoContextH);
-        img.data.set(data);
-        context.putImageData(img, 0, 0);
-        
-        //display all transfered images as thumbnails with attached time codes
-        var urls = canvas.toDataURL();
-        var ndate = new Date();
-        var timeStamp = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
-        var data = {
-            url: urls,
-            time: timeStamp
-        }
-        vm.imgContainer.push(data);
+        var photoData = photoService.renderPhoto(remoteVideo, photo, data);
+         vm.imgContainer.push(photoData);
         //make sure all thumbnails are being rendered on the site
         $scope.$digest();
-        console.log('This is the container size: '+vm.imgContainer.length);
+        console.log('This is the container size: '+vm.imgContainer.length); 
     }
-    
-    function adjustCanvasSize(video) {
-        var h = video.videoHeight;
-        var w = video.videoWidth;
-        photo.width = photoContextW = w;
-        photo.height = photoContextH = h;
-        console.log('Height '+h+' Width '+w); 
-    }  
 })
 })();

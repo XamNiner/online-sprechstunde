@@ -9,11 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="lib/angular-route.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
 </head>
     
 <body>
-<div ng-controller="ChatCtrl as chat">
+<div ng-cloak ng-controller="ChatCtrl as chat">
     <nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -65,9 +66,7 @@
         </div>
       </div>
     </nav>
-        
- <!--------COMPATIBILITY ERROR!-------->       
-    <div ng-cloak ng-show="chat.noMedia">
+<div ng-cloak ng-show="chat.noMedia">
         <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
         </div>
     </div>
@@ -219,16 +218,23 @@
             <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
         </ul>
     </div>
+    <!----------load specific html files for other urls---->
+    <div ng-view></div>
 </div>
+    <script src="lib/angular-route.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="lib/adapter.js"></script>
-    <script src="ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/ui-bootstrap-tpls.min.js"></script>
     <script src="app.js"></script>
     <script src="chat.js"></script>
     <script src="chatDirective.js"></script>
     <script src="scroll.js"></script>
     <script src="socket.js"></script>
     <script src="modalService.js"></script>
-    <script src="customOnChange.js"></script>
+    <script src="onChangeDirective.js"></script>
+    <script src="thumbDirective.js"></script>
+    <script src="photoService.js"></script>
+    <script src="signalingService.js"></script>
+    <script src="utilityService.js"></script>
 </body>    
 </html>
