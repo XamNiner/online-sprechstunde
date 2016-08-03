@@ -276,7 +276,7 @@ angular.module('chatApp')
     }
 
     function receiveLocalVideo() {
-        if (navigator.mediaDevices.getUserMedia !== 'undefined') {
+        if (navigator.mediaDevices.getUserMedia !== 'undefined' || true) {
             //get the video stream
             console.log('getUserMedia active');
             navigator.mediaDevices.getUserMedia({audio: true, video: true})
