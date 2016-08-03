@@ -276,10 +276,11 @@ angular.module('chatApp')
     }
 
     function receiveLocalVideo() {
-        if (navigator.mediaDevices.getUserMedia !== 'undefined' || true) {
+        if (navigator.mediaDevices.getUserMedia !== 'undefined') {
             //get the video stream
             console.log('getUserMedia active');
-            navigator.mediaDevices.getUserMedia({audio: true, video: true})
+            var constraints = { video: true, audio: true };
+            navigator.mediaDevices.getUserMedia(constraints)
             .then(createStream)
             .catch(function(e) {
                 vm.noCamera = true;
