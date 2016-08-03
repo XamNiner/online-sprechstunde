@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('chatApp')
-.controller('ChatCtrl', function($scope, socket, modalService, photoService, signalingService) {
+.controller('ChatCtrl', function($scope, $routeParams, socket, modalService, photoService, signalingService) {
     //view model to encapsulate $scope using controllerAs
     var vm = this;
     
@@ -56,7 +56,7 @@ angular.module('chatApp')
 
     var pcConfig = {
       'iceServers': [{
-        'url': 'stun:stun.l.google.com:19302'
+        'urls': 'stun:stun.l.google.com:19302'
       }]
     };
 

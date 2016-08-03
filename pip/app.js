@@ -15,13 +15,9 @@ angular
     .config(['$routeProvider', 
         function($routeProvider) {
         $routeProvider
-            .when('/sdfsgsg', {
-                templateUrl: 'views/test.html',
+            .when('/room/:roomId', {
+                templateUrl: 'views/room.html',
                 controller: 'ChatCtrl'
-            })
-            .when('/:peerID', {
-            templateUrl: 'views/room.html',
-            controller: 'ChatCtrl'
             })
             .otherwise({
             redirectTo: '/'
