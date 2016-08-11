@@ -1,2 +1,110 @@
-<h1>Test</h1>
-<p>sffsbmfdbmllädfgbm</p>
+<!-- Warning for unsupported browser usage -->  
+<div ng-cloak ng-show="room.noMedia">
+    <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
+    </div>
+</div>
+<div ng-cloak ng-show="room.noCamera">
+    <div class="alert alert-danger" role="alert">Access to camera was not granted. Please reload your browser and press allow when asked for permission!
+    </div>
+</div> 
+
+<!-- MAIN Video Elements -->  
+<div class="container" ng-cloak ng-show="!room.noMedia">
+<div class="row">
+    <div class="col-md-8 stackem">
+    <div class="jumbotron">
+        <div ng-show="room.hasPeerToCall">
+            <button class="btn btn-primary btn-lg center-block" type="button" ng-click="room.startPeerConnection()" ng-disabled="!room.canCall">
+                Call Peer<img src="asset/Phone%20Up%20GHOST2.png" width="50" class="imgbtn"/>
+            </button>
+        </div>
+    <!-- Remote Video -->  
+        <div ng-show="room.inCall">
+        <div class="embed-responsive embed-responsive-4by3">
+        <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">No video available</video>
+        <div class="input-group input-group">
+            <button type="button" class="btn btn-primary" ng-click="room.hangUp()" ng-disabled="!room.inCall"><img src="asset/Phone%20Down%20GHOST.png" width="20"/></button>
+            <button type="button" class="btn btn-primary" ng-click="room.isCollapsed = !room.isCollapsed">Show Photos</button> 
+        </div><!-- /input-group -->   
+        </div>
+        </div>
+        <div class="row">
+        <div uib-collapse="room.isCollapsed">
+            <div ng-hide="!room.gumedia">
+                <canvas id="photo"></canvas>
+            </div>
+        <div class="col-md-3" ng-show="room.picReady">
+            <p>Snapshot</p>
+            <div class="dropdown thumbs"> 
+            <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="test" width="100" height="100">
+            <div class="dropdown-content thumbs-content">
+                <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="test" width="640" height="480">
+            <div class="desc">Snapshot</div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-9">
+        <div id="incoming">
+            <p>Session Photos</p>
+            <div ng-repeat="nails in room.imgContainer track by $index" ng-switch="$index%4">
+                <div class="row" ng-switch-when="0">
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{room.imgContainer[$index].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{room.imgContainer[$index+1].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{room.imgContainer[$index+2].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{room.imgContainer[$index+3].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+	    </div>
+        </div>
+    </div>
+    </div>
+    <!-- Local Video -->  
+    <div class="col-md-4">
+        <div class="embed-responsive embed-responsive-4by3">
+            <video id="localVideoR" autoplay muted controls class="localVideo">Could not init the local video display</video>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto">Snap</button>
+                <button type="button" class="btn btn-primary" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady">Send Photo</button>
+            </div>
+        </div>
+        <br>
+        <!-- Chat Box -->    
+        <div chat-field>
+        </div>
+        </div>
+    </div>    
+</div>

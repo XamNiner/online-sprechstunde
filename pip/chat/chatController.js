@@ -3,12 +3,19 @@
 'use strict';
 
 angular.module('chatApp')
-.controller('ChatCtrl', function($scope, $routeParams, socket, modalService, photoService, signalingService) {
+.controller('ChatCtrl', function($scope, $routeParams, $location, socket, modalService, photoService, signalingService, peerService) {
     //view model to encapsulate $scope using controllerAs
     var vm = this;
-    
+    vm.roomId = $routeParams.roomId;
+    console.log('This is the ID: '+vm.roomId+' - '+$routeParams.roomId);
     vm.messages = [];
     vm.message;
+    
+    //change room after connection
+    //socket.on('set:url', function(url) {
+      //  console.log('Changing URL to the new room address');
+        //$location.url('/room/'+url);
+    //});
     
     vm.addMessage = addMessage;
     
@@ -122,18 +129,6 @@ angular.module('chatApp')
         vm.userNames = uData;
     });
     
-    //listen for room changes
-    socket.on('update:rooms', function(rooms, current_room) {
-        $('#rooms').empty();
-        $.each(rooms, function(key, value) {
-            if (value == current_room) {
-                $('#rooms').append('<div>'+ value + '</div>');
-            } else {
-                $('#rooms').append('<div> <a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-            }
-        });
-    });
-    
     //show Ids of all connected peers(+ own)
     socket.on('get:pid', function(peerIds) {
         console.log('updating the peer ids');
@@ -203,9 +198,11 @@ angular.module('chatApp')
                 console.log('Received a new offer from a peer');
                 if (!isInitiator && !isStarted) {
                     prepareAnswer();
+                    
                 }
                 pc.setRemoteDescription(new RTCSessionDescription(data.session));
                 answerPeer();
+                //peerService.answerPeer();
             } else if (data.session.type === 'answer' && isStarted) {
                 console.log('Receiving sdp answer');
                 pc.setRemoteDescription(new RTCSessionDescription(data.session));
@@ -243,26 +240,6 @@ angular.module('chatApp')
     function sendMessage(message) {
         console.log('Client sending message: ', message);
         socket.emit('message', message);
-    }
-    
-    //init a new peer connection upon receiving an sdp offer
-    function beginAnswering() {
-        console.log('Channel is ready: '+ isChannelReady);
-        console.log('Started: '+isStarted+' LocalStream: '+ localStream +' Channel Ready? '+ isChannelReady);
-        if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
-            console.log('ENTERED!!!')
-            //change button access - able to hang up on the caller
-            vm.canCall = false;
-            vm.inCall = true;
-            if (vm.picReady) {
-                vm.picSendReady = true;
-            }
-            //create new RTCPeerConnection
-        
-            createPeerConnection();
-            pc.addStream(localStream);
-            isStarted = true;
-        }
     }
     //-----------------------------------------------------------------
     //init new local video stream
@@ -307,16 +284,6 @@ angular.module('chatApp')
     //request a new peer connection
     //-----------------------------------------------------------------
     
-    //add your own id suffix
-    function makeId() {
-        //create an id from praxis number, username and suffix
-        //complete version
-        vm.setId = praxis+''+vm.name+''+vm.ownId;
-        console.log('Setting own id from '+vm.setId+' to '+vm.ownId);
-        //send complete peer id to all clients
-        socket.emit('update:pid', vm.setId);
-    }
-    
     //control modal messages
     var modalOptions = {
                 closeButtonText: 'Cancel',
@@ -332,7 +299,7 @@ angular.module('chatApp')
         console.log('Check - '+vm.setId+' - '+vm.peerId);
         //dont request yourself!
         if (vm.peerId !== vm.setId) {
-            signalingService.sendRequest(vm.setId, vm.peerId, message, socket);
+            signalingService.sendRequest(vm.setId, vm.peerId, message);
         } else {
             console.log('You requested yourself');
             modalOptions.headerText = 'Alert: Connection with yourself';
@@ -347,9 +314,9 @@ angular.module('chatApp')
             modalOptions.bodyText = 'Accept peer2peer connection?';
             modalOptions.actionButtonText = 'Accept';
             modalOptions.closeButtonText = 'Decline';
-            modalOptions.okResult = 'Accepted'
+            modalOptions.okResult = 'Accepted';
             modalService.showModal({}, modalOptions).then(function(result) {
-                signalingService.handleRequest(data, result, socket);
+                signalingService.handleRequest(data, result);
             });  
         } else if (isChannelReady && vm.inCall){
             console.log('Another peer called while in p2p call Id: '+data.sender);
@@ -358,7 +325,7 @@ angular.module('chatApp')
                 receiver: data.sender,
                 message: 'in:call'
             };
-            signalingService.sendPrivateMessage(socket, incall);
+            signalingService.sendPrivateMessage(incall);
         } else {
             console.log('Not ready while being called by peer Id: '+data.sender);
             var notReady = {
@@ -366,7 +333,7 @@ angular.module('chatApp')
                 receiver: data.sender,
                 message: 'not:ready'
             }
-            signalingService.sendPrivateMessage(socket, notReady);
+            signalingService.sendPrivateMessage(notReady);
         }  
     }
     
@@ -375,11 +342,37 @@ angular.module('chatApp')
     //-----------------------------------------------------------------
     //begin to establish peer connection
     //-----------------------------------------------------------------
+    //init a new peer connection upon receiving an sdp offer
+    function beginAnswering() {
+        console.log('<<<<<<<<<Begin Answering the SDP Offer');
+        console.log('Started: '+isStarted+' LocalStream: '+ localStream +' Channel Ready? '+ isChannelReady);
+        if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
+            callReady();
+            //create new RTCPeerConnection
+            pc = peerService.beginAnswering(localStream, remoteStream, remoteVideo, isInitiator, dataChannel);
+            isStarted = true;
+        } else {
+            modalOptions.headerText = 'Alert: Failed to answer SDP offer';
+            modalOptions.bodyText = 'Please try again.';
+            modalService.showModal({}, modalOptions);
+        }
+    }
+    
+    function callReady() {
+        vm.canCall = false;
+        vm.inCall = true;
+        if (vm.picReady) {
+            vm.picSendReady = true;
+        }    
+    }
+    
     function answeredRequest(data) {
         console.log('Client with id - '+data.sender+' answered your call.');
                 
         //other peer accepted the request - init new peer connection
         //initiator begin sdp offer
+        console.log('Begin of new Peer Connection');
+       
         var offering = {
             sender: data.receiver,
             receiver: data.sender,
@@ -392,11 +385,7 @@ angular.module('chatApp')
         console.log('Begin of new Peer Connection');
         if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
             //change button access
-            vm.canCall = false;
-            vm.inCall = true;
-            if (vm.picReady) {
-                vm.picSendReady = true;
-            }
+            callReady();
             //new connection
             isStarted = true;
             isInitiator = true;
@@ -516,11 +505,7 @@ angular.module('chatApp')
         if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
             console.log('Started Call Answer');
             //change button access - able to hang up on the caller
-            vm.canCall = false;
-            vm.inCall = true;
-            if (vm.picReady) {
-                vm.sendPicRe
-            }
+            callReady();
             //create new RTCPeerConnection
         
             createPeerConnection();
@@ -542,41 +527,24 @@ angular.module('chatApp')
     
     //stop a running p2p call
     function hangUp() {
-        console.log('Stopping the running call');
-        stop();
-        //disable hangup allow calling again
-        var quitData = {
-            sender: vm.setId,
-            receiver: vm.partnerId,
-            message: 'bye'
-        }
-        signalingService.sendPrivateMessage(socket, quitData);
+        signalingService.hangup(pc, remoteStream, vm.setId, vm.partnerId);
+        resetChannelState();
+        vm.picSendReady = false;
     };
     
     //the caller has ended the call
     function handleRemoteHangup() {
-        console.log('Caller has ended the call');
-        stop();    
+        signalingService.remoteHangup(pc, remoteStream);  
+        resetChannelState();
+        console.log('State of the peer connection: '+pc);
     }
     
-    function stop() {
-        console.log('Stopping peer connection');
+    function resetChannelState() {
         isStarted = false;
         isInitiator = false;
         vm.canCall = true;
         vm.inCall = false;
-        vm.picSendReady = false;
-        //close the connection
-        //pc.removeStream(remoteStream);
-        //check if tracks are available
-        try {
-            remoteStream.getAudioTracks()[0].stop();
-            remoteStream.getVideoTracks()[0].stop();  
-        }catch (e) {
-            console.log('Error closing the stream tracks '+e);
-        }
-        pc.close;
-        pc = null;
+        vm.picSendReady = false;   
     }
     
     //end any calls when reloading or closing the page
@@ -586,7 +554,7 @@ angular.module('chatApp')
             receiver: vm.partnerId,
             message: 'bye'
         }
-        signalingService.sendPrivateMessage(socket, quitData);
+        signalingService.sendPrivateMessage(quitData);
     }
     
     //-----------------------------------------------------------------
@@ -756,6 +724,19 @@ angular.module('chatApp')
         //make sure all thumbnails are being rendered on the site
         $scope.$digest();
         console.log('This is the container size: '+vm.imgContainer.length); 
+    }
+    
+    //-------------------------------
+    //Utility
+    //-------------------------------
+    //add your own id suffix
+    function makeId() {
+        //create an id from praxis number, username and suffix
+        //complete version
+        vm.setId = praxis+''+vm.name+''+vm.ownId;
+        console.log('Setting own id from '+vm.setId+' to '+vm.ownId);
+        //send complete peer id to all clients
+        socket.emit('update:pid', vm.setId);
     }
 })
 })();

@@ -9,18 +9,24 @@
  * Main module of the application.
  */
 angular
-    .module('chatApp', ['ui.bootstrap','ngRoute'
-    ])
+    .module('chatApp', ['ui.bootstrap','ngRoute'])
 
     .config(['$routeProvider', 
         function($routeProvider) {
         $routeProvider
             .when('/room/:roomId', {
                 templateUrl: 'views/room.html',
-                controller: 'ChatCtrl'
+                controller: 'RoomCtrl',
+                controllerAs: 'room'
+                //reloadOnSearch: false
+            })
+            .when('/idConnect', {
+            templateUrl: 'views/idConnect.html',
+            controller: 'ChatCtrl',
+            controllerAs: 'chat'
             })
             .otherwise({
-            redirectTo: '/'
+            redirectTo: '/home'
         });
     }]);
 

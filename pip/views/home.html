@@ -1,0 +1,155 @@
+
+<div ng-cloak ng-show="chat.noMedia">
+        <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
+        </div>
+    </div>
+    <div ng-cloak ng-show="chat.noCamera">
+        <div class="alert alert-danger" role="alert">Access to camera was not granted. Please reload your browser and press allow when asked for permission!
+        </div>
+    </div>    
+    
+<!--------REMOTE VIDEO!-------->   
+    <div class="container" ng-cloak ng-show="!chat.noMedia">
+    <div class="row">
+        <div class="col-md-8 stackem">
+            <div class="jumbotron">
+            <div class="embed-responsive embed-responsive-4by3">
+                <div ng-show="chat.canCall">
+                   <div class="input-group input-group-lg text-center">
+                        <input type="text" class="form-control" placeholder="Call user id..." ng-model="chat.peerId">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" ng-click="chat.sendRequest()" ng-disabled="!chat.canCall">
+                                <img src="asset/Phone%20Up%20GHOST2.png" width="50" class="imgbtn"/>
+                            </button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+                <div ng-show="chat.inCall">
+                    <video id="remoteVideo" autoplay class="remoteVideo">Your Browser does not support video.</video>
+                    <div class="input-group input-group">
+                        <button type="button" class="btn btn-primary" ng-click="chat.hangUp()" ng-disabled="!chat.inCall"><img src="asset/Phone%20Down%20GHOST.png" width="20"/></button>
+                        <button type="button" class="btn btn-primary" ng-click="chat.isCollapsed = !chat.isCollapsed">Show Photos</button> 
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+	       <hr>
+<!--------Photo Display!-------->
+        <div class="row">
+        <div uib-collapse="chat.isCollapsed">
+            <div ng-hide="!chat.gumedia">
+                <canvas id="photo"></canvas>
+            </div>
+        <div class="col-md-3" ng-show="chat.picReady">
+            <p>Snapshot</p>
+            <div class="dropdown thumbs"> 
+            <img ng-src="{{chat.snapImg}}" class="img-responsive thumbnail" alt="test" width="100" height="100">
+            <div class="dropdown-content thumbs-content">
+                <img ng-src="{{chat.snapImg}}" class="img-responsive thumbnail" alt="test" width="640" height="480">
+            <div class="desc">Snapshot</div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-9">
+        <div id="incoming">
+            <p>Session Photos</p>
+            <div ng-repeat="nails in chat.imgContainer track by $index" ng-switch="$index%4">
+                <div class="row" ng-switch-when="0">
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{chat.imgContainer[$index].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{chat.imgContainer[$index+1].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{chat.imgContainer[$index+2].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown thumbs"> 
+                            <img ng-src="{{chat.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="100" height="100">
+                        <div class="dropdown-content thumbs-content">
+                            <img ng-src="{{chat.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <div class="desc">{{chat.imgContainer[$index+3].time}}</div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+	    </div>
+        </div>
+        </div>
+        </div>
+<!--------LOCAL VIDEO!-------->
+        <div class="col-md-4">
+            <div class="embed-responsive embed-responsive-4by3">
+                <div > 
+                    <button type="button" style="position:absolute; top:25%; left:25%;"class="btn btn-primary btn-lg center-block" ng-click="chat.getLocalVideo()">Start Camera</button>
+                </div>
+                <div ng-show="!chat.gumedia">
+                    <video id="localVideo" autoplay muted controls class="localVideo">Your Browser does not support video.</video>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-primary" ng-click="chat.snapPhoto()" ng-disabled="!chat.canPhoto">Snap</button>
+                        <button type="button" class="btn btn-primary" ng-click="chat.sendPhoto()" ng-disabled="!chat.picSendReady">Send Photo</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+<!--------Info Panel!-------->        
+            <div class="panel panel-primary porim" ng-cloak>
+                <p><b>Peer ID:</b> {{chat.setId}}</p>
+                <p><b>Name:</b> {{chat.name}}</p>
+            </div>
+            <div>
+            <form fix-bottom="chat" ng-submit="chat.addMessage()">
+            <div id="chat" class="chatBox" style="height:310px; overflow-y:scroll">
+                <table class="table">
+                    <tbody>
+                    <tr ng-repeat="msg in chat.messages ">
+                        <td><strong>{{msg.sender}} : </strong>
+
+                        {{msg.message}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+                <input type="text" ng-model="chat.message" class="form-control" placeholder="Enter a Message ">
+                <button class="btn btn-primary btn-s" type="submit" ng-hide="true">Submit</button>
+            </form>
+            </div>
+        </div>
+    </div>   
+    </div>
+    <br>
+    <br>
+<!--------Ids and Usernames!-------->        
+    <div>
+        <h2>Usernames:</h2>
+        <ul>
+            <li ng-repeat="user in chat.userNames track by $index">{{user}}</li>
+        </ul>
+    </div>
+    <div>
+        <h2>Peer Ids:</h2>
+        <ul>
+            <li ng-repeat="ids in chat.pids track by $index">{{ids}}</li>
+        </ul>
+    </div>
