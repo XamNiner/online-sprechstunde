@@ -8,19 +8,20 @@
     </div>
 </div> 
 
-<!-- MAIN Video Elements -->  
-<div class="container" ng-cloak ng-show="!room.noMedia">
-    
 <!-- Waiting for peer to accept connection -->  
-<load-spinner name="testSpinner" show="room.waitAnswer">
+<div ng-show="!room.noMedia">
+    <load-spinner name="testSpinner" show="room.waitAnswer">
         <div class="overlay"></div>
         <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
         </div>
         <div class="please-wait">Waiting for connection response...</div>
-</load-spinner>
+</load-spinner>  
+</div>
 
+<!-- MAIN Video Elements -->  
+<div class="container" ng-cloak ng-show="!room.noMedia">
 <button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()" ng-show="false">Mouseenter</button> 
     
 <div class="row">
@@ -37,10 +38,13 @@
         <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">No video available</video>
         <div class="input-group input-group">
             <button type="button" class="btn btn-primary" ng-click="room.hangUp()" ng-disabled="!room.inCall">
-                <img src="asset/2Phone%20Down%20GHOST.png" width="20"/>
+                <img src="../asset/FullScreen%20On.png" width="20"/>
             </button>
             <button type="button" class="btn btn-primary" ng-click="room.isCollapsed = !room.isCollapsed">Show Photos</button> 
-        </div><!-- /input-group -->   
+            <button type="button" class="btn btn-primary">
+                <img src="../asset/2FullScreen%20On%20GHOST.png" width="20"/>
+            </button>
+        </div><!-- /input-group -->  
         </div>
         </div>
         <div class="row">
@@ -66,36 +70,36 @@
                 <div class="row" ng-switch-when="0">
                     <div class="col-md-3">
                         <div class="dropdown thumbs"> 
-                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail" width="100" height="100">
+                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail">
                         <div class="dropdown-content thumbs-content">
-                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <img ng-src="{{room.imgContainer[$index].url}}" class="img-responsive thumbnail">
                             <div class="desc">{{room.imgContainer[$index].time}}</div>
                         </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dropdown thumbs"> 
-                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="100" height="100">
+                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail">
                         <div class="dropdown-content thumbs-content">
-                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <img ng-src="{{room.imgContainer[$index+1].url}}" class="img-responsive thumbnail">
                             <div class="desc">{{room.imgContainer[$index+1].time}}</div>
                         </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dropdown thumbs"> 
-                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="100" height="100">
+                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail">
                         <div class="dropdown-content thumbs-content">
-                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <img ng-src="{{room.imgContainer[$index+2].url}}" class="img-responsive thumbnail">
                             <div class="desc">{{room.imgContainer[$index+2].time}}</div>
                         </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dropdown thumbs"> 
-                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="100" height="100">
+                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail">
                         <div class="dropdown-content thumbs-content">
-                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail" width="640" height="480">
+                            <img ng-src="{{room.imgContainer[$index+3].url}}" class="img-responsive thumbnail">
                             <div class="desc">{{room.imgContainer[$index+3].time}}</div>
                         </div>
                         </div>

@@ -10,14 +10,14 @@ body{
     margin-bottom: : 50px !important;
 }
 
-.localVideo{
+.localVideo {
     border: 2px solid red;
     border-radius: 20px;
     max-width: inherit;
     max-height: inherit;
 }
 
-.remoteVideo{
+.remoteVideo {
     border: 2px solid red;
     border-radius: 20px;
     max-width: inherit;
@@ -36,16 +36,6 @@ body{
 
 .bottomleft {
     position:absolute; bottom:0px;  margin-bottom:7px; left: 0px;
-}
-
-.porim {
-    border-width: medium;
-    font-size: 20px;
-    padding-left: 5px;
-}
-
-.dru {
-    width: 300%; 
 }
 
 .thumbs {
@@ -108,7 +98,7 @@ body{
 }
 
 .imgbtn {
-    font-size:30px; 
+    font-size:80px; 
     vertical-align: top:
 }
 

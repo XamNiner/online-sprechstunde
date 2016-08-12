@@ -29,6 +29,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.hangUp = hangUp;
     vm.setName = setName;
     
+    //change the chat name
     function setName() {
         utilityService.changeName(vm.userName, vm.newName);    
     }

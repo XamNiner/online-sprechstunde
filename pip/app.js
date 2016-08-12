@@ -18,7 +18,6 @@ angular
                 templateUrl: 'views/room.html',
                 controller: 'RoomCtrl',
                 controllerAs: 'room'
-                //reloadOnSearch: false
             })
             .when('/idConnect', {
             templateUrl: 'views/idConnect.html',
