@@ -58,7 +58,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         pc = null;              //RTC peer connection object
     
     function initLocalVid() {
-        
+        try {
+            if (navigator.mediaDevices.getUserMedia !== 'undefined') {
             //get the video stream
             console.log('getUserMedia active');
             //video resolutions and audio  
@@ -71,20 +72,22 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
                         facingMode: 'user'
                     }
                 }
-            
             navigator.mediaDevices.getUserMedia(constraints)
             .then(createStream)
             .catch(function(e) {
                 vm.noCamera = true;
-                  vm.noMedia = true;
-            console.log('getUserMedia is not supported in this browser!');
                 alert('getUserMedia error: ' + e.name);
             });
             console.log('AFTER STREAM');
             vm.gumedia = false;
-        
-          
-        
+        } else {
+            vm.noMedia = true;
+            console.log('getUserMedia is not supported in this browser!');
+        }
+        } catch (error) {
+            vm.noMedia = true;
+            console.log('getUserMedia is not supported in this browser!');
+        }
     };
     initLocalVid();   
     
