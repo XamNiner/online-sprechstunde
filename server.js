@@ -18,8 +18,6 @@ app.use(express.static(__dirname + '/pip')); //folder with angular client code
 //res.sendfile(__dirname + '/pip/index.html');
 //});
 
-
-
 // Chatroom - names of all users
 var usernames = {};
 

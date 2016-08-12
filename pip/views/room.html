@@ -1,16 +1,3 @@
-
-<!-- Waiting for peer to accept connection -->  
-<load-spinner name="testSpinner" show="room.waitAnswer">
-        <div class="overlay"></div>
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-        </div>
-        <div class="please-wait">Waiting for connection response...</div>
-</load-spinner>
-
-<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()" ng-show="false">Mouseenter</button> 
-
 <!-- Warning for unsupported browser usage -->  
 <div ng-cloak ng-show="room.noMedia">
     <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
@@ -23,6 +10,19 @@
 
 <!-- MAIN Video Elements -->  
 <div class="container" ng-cloak ng-show="!room.noMedia">
+    
+<!-- Waiting for peer to accept connection -->  
+<load-spinner name="testSpinner" show="room.waitAnswer">
+        <div class="overlay"></div>
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+        </div>
+        <div class="please-wait">Waiting for connection response...</div>
+</load-spinner>
+
+<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()" ng-show="false">Mouseenter</button> 
+    
 <div class="row">
     <div class="col-md-8 stackem">
     <div class="jumbotron">

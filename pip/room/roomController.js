@@ -13,7 +13,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.isCollapsed = true;
     vm.hasPeerToCall = false;
     vm.waitAnswer = false;
-    
+    var roomId = $routeParams.roomId,
+        currentRoom = 'room1';
     //IDs for client and his peer
     vm.peerId;
     vm.clientId;
@@ -22,7 +23,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.gumedia = true;
     vm.noMedia = false;
     vm.noCamera = false;
-    vm.currentRoom = 'room1';
     
     vm.startPeerConnection = startPeerConnection;
     //hang up on an active call
@@ -42,8 +42,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         };
     
     var data = {
-        newId: vm.roomId,
-        oldId: vm.currentRoom
+        newId: roomId,
+        oldId: currentRoom
     }
     
     var localVideoR = document.getElementById('localVideoR'), 
@@ -67,7 +67,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
                     audio: true,
                     video: {
                         width: { min: 640, ideal: 1280, max: 1920 },
-                        height: { min: 480, ideal: 720, max: 1080 }
+                        height: { min: 480, ideal: 720, max: 1080 },
+                        facingMode: 'user'
                     }
                 }
             
@@ -91,7 +92,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         localVideoR.src = window.URL.createObjectURL(stream);
         localStream = stream;
         //check availability of room Id
-        console.log('room joining shenanigans');
         socket.emit('check:Id', data);
         vm.canPhoto = true;
     }
