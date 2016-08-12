@@ -88,7 +88,8 @@ io.on('connection', function (socket) {
         socket.username = data.newName;
         console.log('Socket name '+socket.username);
         //inform other peers that user changed his name
-        socket.broadcast.emit('update:chat', 'SERVER', data.oldName + ' has changed name to '+ socket.username);
+        socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', data.oldName + ' has changed name to '+ socket.username);
+        socket.emit('update:chat', 'SERVER', 'You have changed your name to '+ socket.username);
         io.sockets.emit('update:user', usernames);
     })
     
@@ -195,6 +196,7 @@ io.on('connection', function (socket) {
             }
         }
         var data = {
+            name: socket.username,
             roomId: roomId,
             userId: socket.id,
             member: 1,
@@ -208,10 +210,9 @@ io.on('connection', function (socket) {
             socket.leave(prevRoomId);
             socket.room = roomId;
             socket.join(roomId);
+            
             //send client affirmation message
             socket.emit('update:chat', 'SERVER', 'you have connected to room '+roomId);
-            //enter the room
-            socket.emit('join:room', data);
 
             //tell members of the room that a new client has connected
             socket.broadcast.to(roomId).emit('update:chat', 'SERVER', socket.username + ' has connected');
@@ -220,7 +221,6 @@ io.on('connection', function (socket) {
             //the requested room was full
             data.msg = msg;
             log('Informing user that the room is full', msg);
-            socket.emit('join:room', data);
             log('The socket room: ', socket.room);
         } else {
             msg = 'create';
@@ -237,9 +237,9 @@ io.on('connection', function (socket) {
             var roomnr = io.sockets.adapter.rooms[socket.room];
             var rl = roomnr.length;
             log('number of users in the room', rl);
-            socket.emit('join:room', data);
             log('The socket room: ', socket.room);
         }
+        socket.emit('join:room', data);
     });
     
     socket.on('check:room', function(url) {

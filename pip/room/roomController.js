@@ -1,14 +1,18 @@
 (function() {
 'use strict';
     
-angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $routeParams, $location, socket, peerService, signalingService, modalService, routeService, photoService) {
+angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $routeParams, $location, socket, peerService, signalingService, modalService, routeService, photoService, utilityService, spinnerService) {
     var vm = this;
+    vm.userName;
+    vm.newName;
     vm.roomId = $routeParams.roomId;
     vm.oldUrl;
     vm.newUrl;
     vm.canCall = true;
     vm.inCall = false; 
+    vm.isCollapsed = true;
     vm.hasPeerToCall = false;
+    vm.waitAnswer = false;
     
     //IDs for client and his peer
     vm.peerId;
@@ -23,6 +27,11 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.startPeerConnection = startPeerConnection;
     //hang up on an active call
     vm.hangUp = hangUp;
+    vm.setName = setName;
+    
+    function setName() {
+        utilityService.changeName(vm.userName, vm.newName);    
+    }
     
     //display information panel
     var modalOptions = {
@@ -31,10 +40,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
                 headerText: 'Standard header',
                 bodyText: 'Standard body.'
         };
-    
-    //photo
-    vm.picSendReady = false;
-    vm.isCollapsed = true;
     
     var data = {
         newId: vm.roomId,
@@ -56,7 +61,16 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
          if (navigator.mediaDevices.getUserMedia !== 'undefined') {
             //get the video stream
             console.log('getUserMedia active');
-            var constraints = { video: true, audio: true };
+            //video resolutions and audio  
+            
+            var constraints = {
+                    audio: true,
+                    video: {
+                        width: { min: 640, ideal: 1280, max: 1920 },
+                        height: { min: 480, ideal: 720, max: 1080 }
+                    }
+                }
+            
             navigator.mediaDevices.getUserMedia(constraints)
             .then(createStream)
             .catch(function(e) {
@@ -70,7 +84,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
             console.log('getUserMedia is not supported in this browser!');
         }
     };
-    
     initLocalVid();   
     
     function createStream(stream){
@@ -85,6 +98,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     
     //answer to the check
     socket.on('join:room', function(data) {
+        vm.userName = data.name;
         roomMember = data.member;
         vm.clientId = data.userId;
         if(data.msg === 'full') {
@@ -141,11 +155,23 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
                 signalingService.handleRequest2(result);
                 if (result === 'Accepted') {
                     vm.hasPeerToCall = false;
+                } else {
+                  vm.hasPeerToCall = true;  
                 }
             });
          } else if(msg === 'answered') {
              callPeer();
+             vm.connectStatus = false;
              vm.hasPeerToCall = false;
+             vm.waitAnswer= false;
+         } else if (msg === 'denied') {
+            console.log('Client with id - '+data.sender+' refused the connection.');
+            //display refusal
+            modalOptions.headerText = 'Client refused your request';
+            modalOptions.bodyText = 'Please try again.';
+            modalService.showModal({}, modalOptions);
+            vm.hasPeerToCall = true;
+            vm.waitAnswer= false;
          } else if(msg === 'bye' && isStarted) {
              console.log('Init remote hangup>>>>>>>>>>>>>>>>');
              pc = signalingService.remoteHangup(pc, remoteStream, remoteVideoR);
@@ -262,7 +288,9 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     }
     
     function startPeerConnection() {
+        vm.connectStatus = true;
         var message = 'request';
+        vm.waitAnswer= true;
         signalingService.sendRequest2(message);
     }
     
@@ -291,6 +319,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         vm.inCall = false;
         vm.picSendReady = false; 
         vm.hasPeerToCall = true;
+        vm.waitAnswer= false;
     }
     
     //end any calls when reloading or closing the page

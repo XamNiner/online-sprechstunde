@@ -1,3 +1,16 @@
+
+<!-- Waiting for peer to accept connection -->  
+<load-spinner name="testSpinner" show="room.waitAnswer">
+        <div class="overlay"></div>
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+        </div>
+        <div class="please-wait">Waiting for connection response...</div>
+</load-spinner>
+
+<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()">Mouseenter</button> 
+
 <!-- Warning for unsupported browser usage -->  
 <div ng-cloak ng-show="room.noMedia">
     <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
@@ -15,15 +28,17 @@
     <div class="jumbotron">
         <div ng-show="room.hasPeerToCall">
             <button class="btn btn-primary btn-lg center-block" type="button" ng-click="room.startPeerConnection()" ng-disabled="!room.canCall">
-                Call Peer<img src="asset/Phone%20Up%20GHOST2.png" width="50" class="imgbtn"/>
+                Call Peer<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
             </button>
         </div>
     <!-- Remote Video -->  
         <div ng-show="room.inCall">
-        <div class="embed-responsive embed-responsive-4by3">
+        <div class="embed-responsive embed-responsive-16by9">
         <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">No video available</video>
         <div class="input-group input-group">
-            <button type="button" class="btn btn-primary" ng-click="room.hangUp()" ng-disabled="!room.inCall"><img src="asset/Phone%20Down%20GHOST.png" width="20"/></button>
+            <button type="button" class="btn btn-primary" ng-click="room.hangUp()" ng-disabled="!room.inCall">
+                <img src="asset/2Phone%20Down%20GHOST.png" width="20"/>
+            </button>
             <button type="button" class="btn btn-primary" ng-click="room.isCollapsed = !room.isCollapsed">Show Photos</button> 
         </div><!-- /input-group -->   
         </div>
@@ -33,6 +48,7 @@
             <div ng-hide="!room.gumedia">
                 <canvas id="photo"></canvas>
             </div>
+        <!-- Photo Display -->      
         <div class="col-md-3" ng-show="room.picReady">
             <p>Snapshot</p>
             <div class="dropdown thumbs"> 
@@ -94,13 +110,25 @@
     </div>
     <!-- Local Video -->  
     <div class="col-md-4">
-        <div class="embed-responsive embed-responsive-4by3">
+        <div class="embed-responsive embed-responsive-16by9">
             <video id="localVideoR" autoplay muted controls class="localVideo">Could not init the local video display</video>
             <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-primary" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto">Snap</button>
+                <button type="button" class="btn btn-primary" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto" uib-popover="Snap a picture" popover-trigger="'mouseenter'">
+                    <img src="../asset/2Foto%20GHOST.png" width="16"/>
+                </button>
                 <button type="button" class="btn btn-primary" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady">Send Photo</button>
             </div>
         </div>
+        <br>
+        <!-- Change Name -->  
+        <div class="input-group input-group-lg text-center">
+            <input type="text" class="form-control" placeholder="Set user name..." ng-model="room.newName">
+            <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" ng-click="room.setName()">
+                Name
+            </button>
+            </span>
+        </div><!-- /input-group -->
         <br>
         <!-- Chat Box -->    
         <div chat-field>

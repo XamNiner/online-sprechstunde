@@ -106,12 +106,12 @@ angular.module('chatApp').service('signalingService', function(socket) {
     }
      
     vm.handleRequest2 = function(result) {
-        console.log('Accepted the other clients request!');
+        console.log('Answered the other clients request! '+result);
         var message = 'Unanswered';
         //accepting the peers call
         if (result === 'Accepted') {
             message = 'answered';
-        } else if(result === 'Denied') {
+        } else {
             message = 'denied';
         }
         //send answer to caller
