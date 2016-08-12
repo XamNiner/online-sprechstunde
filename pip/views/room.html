@@ -9,7 +9,7 @@
         <div class="please-wait">Waiting for connection response...</div>
 </load-spinner>
 
-<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()">Mouseenter</button> 
+<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()" ng-show="false">Mouseenter</button> 
 
 <!-- Warning for unsupported browser usage -->  
 <div ng-cloak ng-show="room.noMedia">

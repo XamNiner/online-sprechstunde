@@ -13,10 +13,12 @@ server.listen(port, function () {
 });
 
 // Routing
-app.use(express.static(__dirname + '/pip'));
+app.use(express.static(__dirname + '/pip')); //folder with angular client code
 //app.get(‘/’, function (req, res) {
 //res.sendfile(__dirname + '/pip/index.html');
 //});
+
+
 
 // Chatroom - names of all users
 var usernames = {};
@@ -29,6 +31,8 @@ var rooms = [];
 
 //count number of users
 var userNumber = 0;
+
+
 //--------------------------------
 //handling of socket events
 //--------------------------------
