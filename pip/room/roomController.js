@@ -59,7 +59,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     
     function initLocalVid() {
         try {
-            if (navigator.mediaDevices.getUserMedia !== 'undefined') {
             //get the video stream
             console.log('getUserMedia active');
             //video resolutions and audio  
@@ -80,15 +79,12 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
             });
             console.log('AFTER STREAM');
             vm.gumedia = false;
-        } else {
-            vm.noMedia = true;
-            console.log('getUserMedia is not supported in this browser!');
-        }
         } catch (error) {
             vm.noMedia = true;
             console.log('getUserMedia is not supported in this browser!');
         }
     };
+    
     initLocalVid();   
     
     function createStream(stream){
