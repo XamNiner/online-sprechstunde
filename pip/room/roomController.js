@@ -179,6 +179,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
              pc = signalingService.remoteHangup(pc, remoteStream, remoteVideoR);
              resetChannelState();
              remoteVideoR.src = '';
+             vm.hasPeerToCall = false;
          }
     });
     

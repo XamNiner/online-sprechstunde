@@ -22,11 +22,9 @@
 
 <!-- MAIN Video Elements -->  
 <div class="container" ng-cloak ng-show="!room.noMedia">
-<button uib-popover="I appeared on mouse enter!" popover-trigger="'mouseenter'" type="button" class="btn btn-default" ng-click="room.showSpinner()" ng-show="false">Mouseenter</button> 
-    
 <div class="row">
     <div class="col-md-8 stackem">
-    <div class="jumbotron">
+
         <div ng-show="room.hasPeerToCall">
             <button class="btn btn-primary btn-lg center-block" type="button" ng-click="room.startPeerConnection()" ng-disabled="!room.canCall">
                 Call Peer<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
@@ -36,12 +34,8 @@
         <div ng-show="room.inCall">
         <div class="embed-responsive embed-responsive-16by9">
         <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">No video available</video>
-            <div class="input-group input-group">
-            <button type="button" class="btn btn-primary" ng-click="room.hangUp()" ng-disabled="!room.inCall">
-                <img src="../asset/2Phone%20Down%20GHOST.png" width="20"/>
-            </button>
-            <button type="button" class="btn btn-primary" ng-click="room.isCollapsed = !room.isCollapsed">Show Photos</button> 
-        </div><!-- /input-group -->  
+            <button class="btn-img aaa" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.hangUp()" ng-disabled="!room.inCall"></button>
+            <button class="btn-img" ng-click="room.isCollapsed = !room.isCollapsed"><span class="glyphicon glyphicon-picture"></span></button>
         </div>
         </div>
         <div class="row">
@@ -108,17 +102,12 @@
 	    </div>
         </div>
     </div>
-    </div>
     <!-- Local Video -->  
     <div class="col-md-4">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="localVideoR" autoplay muted controls class="localVideo">Could not init the local video display</video>
-            <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-primary" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto" uib-popover="Snap a picture" popover-trigger="'mouseenter'">
-                    <img src="../asset/2Foto%20GHOST.png" width="16"/>
-                </button>
-                <button type="button" class="btn btn-primary" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady">Send Photo</button>
-            </div>
+            <button class="btn-img photo" uib-popover="End the Call" popover-trigger="'mouseenter'" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto"></button>
+            <button class="btn-img" uib-popover="End the Call" popover-trigger="'mouseenter'" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady"><span class="glyphicon glyphicon-send"></span></button>
         </div>
         <br>
         <!-- Change Name -->  
