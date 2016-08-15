@@ -1,8 +1,8 @@
 (function() {
 'use strict';
     
-angular.module('chatApp').service('modalService', ['$uibModal', 
-    function($uibModal) {
+angular.module('chatApp').service('modalService', ['$uibModal', '$uibModalStack',
+    function($uibModal, $uibModalStack) {
         //displaying modals using ui.bootstrap
         var modalDefaults = {
             backdrop: true,
@@ -53,5 +53,9 @@ angular.module('chatApp').service('modalService', ['$uibModal',
             }
             return $uibModal.open(tempModalDefaults).result;
         };
+        
+        this.close = function(reason) {
+            $uibModalStack.dismissAll(reason);    
+        }
     }])
 })()

@@ -1,7 +1,7 @@
 {
   "name": "online-sprechstunde",
   "version": "1.0.0",
-  "description": "",
+  "description": "Online video chat application utilising socket io messaging.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

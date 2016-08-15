@@ -152,6 +152,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
             modalOptions.actionButtonText = 'Accept';
             modalOptions.closeButtonText = 'Decline';
             modalOptions.okResult = 'Accepted';
+            modalService.close(); 
             modalService.showModal({}, modalOptions).then(function(result) {
                 signalingService.handleRequest2(result);
                 if (result === 'Accepted') {
