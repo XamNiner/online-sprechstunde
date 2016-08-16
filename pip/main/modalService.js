@@ -13,7 +13,7 @@ angular.module('chatApp').service('modalService', ['$uibModal', '$uibModalStack'
         
         //standard description for modal parts
         var modalOptions = {
-            closeButtonText: 'Close',
+            closeButtonText: 'Abbruch',
             actionButtonText: 'OK',
             headerText: 'Header',
             bodyText: 'Body',

@@ -8,13 +8,14 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.roomId = $routeParams.roomId;
     vm.oldUrl;
     vm.newUrl;
-    vm.canCall = true;
-    vm.inCall = false; 
-    vm.isCollapsed = true;
-    vm.hasPeerToCall = false;
-    vm.waitAnswer = false;
+    vm.canCall = true;          //able to call another peer
+    vm.inCall = false;          //currently in call with other peer
+    vm.hasPeerToCall = false;   //another peer in the room to call
+    vm.waitAnswer = false;      //awaiting answer to request
+    vm.fs = false;              //fullscreen mode
     var roomId = $routeParams.roomId,
         currentRoom = 'room1';
+    
     //IDs for client and his peer
     vm.peerId;
     vm.clientId;
@@ -24,24 +25,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.noMedia = false;
     vm.noCamera = false;
     
-    vm.startPeerConnection = startPeerConnection;
-    //hang up on an active call
-    vm.hangUp = hangUp;
-    vm.setName = setName;
-    
-    //change the chat name
-    function setName() {
-        utilityService.changeName(vm.userName, vm.newName);    
-    }
-    
-    //display information panel
-    var modalOptions = {
-                closeButtonText: 'Cancel',
-                actionButtonText: 'Ok',
-                headerText: 'Standard header',
-                bodyText: 'Standard body.'
-        };
-    
     var data = {
         newId: roomId,
         oldId: currentRoom
@@ -49,6 +32,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     
     var localVideoR = document.getElementById('localVideoR'), 
         remoteVideoR = document.getElementById('remoteVideoR'),
+        remoteFSVideo= document.getElementById('remoteFSVideo'),
         localStream,
         remoteStream;
     
@@ -57,6 +41,40 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         roomMember = 0,         //number of people in the room
         owner = false,          //creator of the room
         pc = null;              //RTC peer connection object
+    
+    //----------------------------------------------------------
+    
+    vm.startPeerConnection = startPeerConnection;   //re-initialize a call
+    vm.hangUp = hangUp;                             //hang up on an active call
+    vm.setName = setName;                           //change chat username
+    vm.goFullScreen = goFullScreen;                 //set remote video to fullscreen
+    
+    //change the chat name
+    function setName() {
+        utilityService.changeName(vm.userName, vm.newName);    
+    }
+    
+    function goFullScreen(){
+        console.log('-WAITING-');
+        console.log('Going fullScreen');
+
+       // utilityService.goFullScreen(remoteVideoR);
+        vm.fs = true;
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        console.log('Width - '+w+' - Height '+h);
+        //remoteVideoR.style.width = w+'px';
+        //remoteVideoR.style.height = h+'px';
+        remoteFSVideo.src = window.URL.createObjectURL(remoteStream);
+    }
+    
+    //display information panel
+    var modalOptions = {
+                closeButtonText: 'Abbruch',
+                actionButtonText: 'Ok',
+                headerText: 'Standard header',
+                bodyText: 'Standard body.'
+        };
     
     function initLocalVid() {
         try {
@@ -104,8 +122,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         vm.clientId = data.userId;
         if(data.msg === 'full') {
             console.log('Sorry the room is already at maximum capacity');
-            modalOptions.headerText = 'Room: Full';
-            modalOptions.bodyText = 'Please try again or choose another room.';
+            modalOptions.headerText = 'Raum: Voll';
+            modalOptions.bodyText = 'Bitte versuchen Sie es noch einmal oder wählen Sie einen anderen Raum.';
             modalService.showModal({}, modalOptions);
         } else if (data.msg === 'joined') {
             console.log('Preparing to establish a new peer connection');
@@ -147,10 +165,10 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         console.log('Got the following message: '+msg);
          if (msg === 'request') {
             console.log('received a request'); 
-            modalOptions.headerText = 'Connection request from Peer';
-            modalOptions.bodyText = 'Accept peer2peer connection?';
-            modalOptions.actionButtonText = 'Accept';
-            modalOptions.closeButtonText = 'Decline';
+            modalOptions.headerText = 'Verbindungsanfrage von einem Nutzer';
+            modalOptions.bodyText = 'Möchten Sie eine Verbindung zu diesem Nutzer herstellen?';
+            modalOptions.actionButtonText = 'Ja';
+            modalOptions.closeButtonText = 'Nein';
             modalOptions.okResult = 'Accepted';
             modalService.close(); 
             modalService.showModal({}, modalOptions).then(function(result) {
@@ -169,8 +187,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
          } else if (msg === 'denied') {
             console.log('Client with id - '+data.sender+' refused the connection.');
             //display refusal
-            modalOptions.headerText = 'Client refused your request';
-            modalOptions.bodyText = 'Please try again.';
+            modalOptions.headerText = 'Nutzer hat ihre Anfrage abgelehnt';
+            modalOptions.bodyText = 'Bitte versuchen Sie es erneut.';
             modalService.showModal({}, modalOptions);
             vm.hasPeerToCall = true;
             vm.waitAnswer= false;
@@ -334,8 +352,10 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     //-----------------------------------------------------------------
     //capture a picture and send it over the RTC data channel
     //-----------------------------------------------------------------
+    
     var photo = document.getElementById('photo');
     var photoContext = photo.getContext('2d'); 
+    var phCo = photo.getContext('2d');
     //set picture dimensions
     var photoContextW,
         photoContextH;
@@ -355,7 +375,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.sendPhoto = sendPhoto;
     
     function snapPhoto() {
-        vm.snapImg = photoService.snap(localVideoR, photo, photoContext);
+        vm.snapImg = photoService.snap(localVideoR, photo, phCo);
         vm.picReady = true;
         if (vm.inCall) {
             vm.picSendReady = true;
@@ -365,7 +385,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     function sendPhoto() {
         //check if in call and a photo is available
         if (vm.picReady && vm.inCall) {
-           photoService.sendPhoto(photo, photoContext, dataChannel);
+            photoContext = phCo;
+            photoService.sendPhoto(photo, photoContext, dataChannel);
         }
     }
     

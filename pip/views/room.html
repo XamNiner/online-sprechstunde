@@ -1,23 +1,25 @@
 <!-- Warning for unsupported browser usage -->  
 <div ng-cloak ng-show="room.noMedia">
-    <div class="alert alert-danger" role="alert">Can't stream Video because getUserMedia is not available in your browser. Please use Firefox or Chrome!
+    <div class="alert alert-danger" role="alert">Videoübertragung ist nicht möglich, da getUserMedia nicht von ihrem Browser unterstützt wird. Bitte nutzen Sie Chrome oder Firefox!
     </div>
 </div>
 <div ng-cloak ng-show="room.noCamera">
-    <div class="alert alert-danger" role="alert">Access to camera was not granted. Please reload your browser and press allow when asked for permission!
+    <div class="alert alert-danger" role="alert">Es wurde keine Freigabe für die Kamera erteilt. Bitte laden Sie die Seite neu und genehmigen Sie den Zugriff auf ihre Kamera.
     </div>
 </div> 
 
+<!-- disable/hide everything when switching to fullscreen -->  
+<div ng-hide="room.fs">
 <!-- Waiting for peer to accept connection -->  
 <div ng-show="!room.noMedia">
-    <load-spinner name="testSpinner" show="room.waitAnswer">
+    <load-spinner name="connectSpinner" show="room.waitAnswer">
         <div class="overlay"></div>
         <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
         </div>
-        <div class="please-wait">Waiting for connection response...</div>
-</load-spinner>  
+        <div class="please-wait">Warte auf Antwort...</div>
+    </load-spinner>  
 </div>
 
 <!-- MAIN Video Elements -->  
@@ -27,25 +29,26 @@
 
         <div ng-show="room.hasPeerToCall">
             <button class="btn btn-primary btn-lg center-block" type="button" ng-click="room.startPeerConnection()" ng-disabled="!room.canCall">
-                Call Peer<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
+                Nutzer anrufen<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
             </button>
         </div>
     <!-- Remote Video -->  
         <div ng-show="room.inCall">
         <div class="embed-responsive embed-responsive-16by9">
-        <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">No video available</video>
+        <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
             <button class="btn-img aaa" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.hangUp()" ng-disabled="!room.inCall"></button>
-            <button class="btn-img" ng-click="room.isCollapsed = !room.isCollapsed"><span class="glyphicon glyphicon-picture"></span></button>
+            <button class="btn-img fs" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.goFullScreen()" ng-disabled="!room.inCall"></button>
         </div>
         </div>
+        <hr>
         <div class="row">
-        <div uib-collapse="room.isCollapsed">
+        <div ng-show="room.picReady">
             <div ng-hide="!room.gumedia">
                 <canvas id="photo"></canvas>
             </div>
         <!-- Photo Display -->      
         <div class="col-md-3" ng-show="room.picReady">
-            <p>Snapshot</p>
+            <p>Screenshot</p>
             <div class="dropdown thumbs"> 
             <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="test" width="100" height="100">
             <div class="dropdown-content thumbs-content">
@@ -56,7 +59,7 @@
         </div>
         <div class="col-md-9">
         <div id="incoming">
-            <p>Session Photos</p>
+            <p>Übertragene Bilder:</p>
             <div ng-repeat="nails in room.imgContainer track by $index" ng-switch="$index%4">
                 <div class="row" ng-switch-when="0">
                     <div class="col-md-3">
@@ -106,23 +109,27 @@
     <div class="col-md-4">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="localVideoR" autoplay muted controls class="localVideo">Could not init the local video display</video>
-            <button class="btn-img photo" uib-popover="End the Call" popover-trigger="'mouseenter'" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto"></button>
-            <button class="btn-img" uib-popover="End the Call" popover-trigger="'mouseenter'" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady"><span class="glyphicon glyphicon-send"></span></button>
+            <button class="btn btn-img photo" uib-popover="Snap a photo" popover-trigger="'mouseenter'" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto"></button>
+            <button class="btn-img" uib-popover="Send a Photo" popover-trigger="'mouseenter'" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady"><span class="glyphicon glyphicon-send"></span></button>
         </div>
         <br>
         <!-- Change Name -->  
         <div class="input-group input-group-lg text-center">
-            <input type="text" class="form-control" placeholder="Set user name..." ng-model="room.newName">
+            <input type="text" class="form-control" placeholder="Nutzername..." ng-model="room.newName">
             <span class="input-group-btn">
             <button class="btn btn-primary" type="button" ng-click="room.setName()">
                 Name
             </button>
             </span>
-        </div><!-- /input-group -->
+        </div><!-- input-group -->
         <br>
         <!-- Chat Box -->    
-        <div chat-field>
-        </div>
-        </div>
-    </div>    
+        <div chat-field></div>
+    </div><!-- col-md-4 -->
+</div><!-- row -->    
+</div><!-- container -->
+</div>
+
+<div ng-show="room.fs">
+    <video id="remoteFSVideo" autoplay controls class="fsVideo" poster="../asset/stand.jpg" width="600px" height="470px">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
 </div>

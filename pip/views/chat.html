@@ -1,6 +1,6 @@
 <div>
 <form ng-submit="vm.addMessage()">
-<div id="chat" class="chatBox" style="height:310px; overflow-y:scroll">
+<div id="chat" class="chatBox" style="height:250px; overflow-y:scroll">
     <table class="table">
         <tbody>
         <tr ng-repeat="msg in vm.messages ">
@@ -11,7 +11,7 @@
         </tbody>
     </table>
 </div>
-    <input type="text" ng-model="vm.message" class="form-control" placeholder="Enter a Message ">
+    <input type="text" ng-model="vm.message" class="form-control" placeholder="Neue Nachricht...">
     <button class="btn btn-primary btn-s" type="submit" ng-hide="true">Submit</button>
 </form>
 </div>

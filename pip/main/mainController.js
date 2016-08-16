@@ -16,7 +16,7 @@ angular.module('chatApp').controller('MainCtrl', function($scope, $routeParams, 
     socket.on('connect', function() {
         //prompt user to enter a username
         //vm.name = prompt('Enter a username!');
-        socket.emit('add:user', 'Guest');
+        socket.emit('add:user', 'Gast');
     });
     
     //logging the server messages

@@ -15,5 +15,24 @@ angular.module('chatApp').service('utilityService', function(socket) {
         }
         socket.emit('newname:user', data);
     }
+    
+    vm.goFullScreen = function(video) {
+        if (video.requestFullscreen) {
+            console.log('Standard Full');
+            video.requestFullscreen();
+        }
+        else if (video.mozRequestFullScreen) {
+            console.log('Firefox Full');
+            video.mozRequestFullScreen();
+        }
+        else if (video.webkitRequestFullScreen) {
+            console.log('Chrome Full');
+            video.webkitRequestFullScreen();
+        }
+        else if (video.msRequestFullscreen) {
+            console.log('MS Full');
+            video.msRequestFullscreen();
+        }
+    }
 }) 
 })()

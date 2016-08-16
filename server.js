@@ -32,7 +32,7 @@ var userNumber = 0;
 
 
 //--------------------------------
-//handling of socket events
+//handling of socket io events
 //--------------------------------
 io.on('connection', function (socket) {
     var address = socket.handshake.address;
@@ -65,7 +65,7 @@ io.on('connection', function (socket) {
         socket.join(roomAddr);
         
         //send client affirmation message
-        socket.emit('update:chat', 'SERVER', 'you have connected to room '+roomAddr);
+        socket.emit('update:chat', 'SERVER', 'Sie sind dem Raum '+roomAddr+' beigetreten.');
 
         //set initial peer id for the new client
         var peerId = praxis+''+socket.username+''+socket.id.substring(2,6);
@@ -90,10 +90,10 @@ io.on('connection', function (socket) {
         socket.username = data.newName;
         console.log('Socket name '+socket.username);
         //inform other peers that user changed his name
-        socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', data.oldName + ' has changed name to '+ socket.username);
-        socket.emit('update:chat', 'SERVER', 'You have changed your name to '+ socket.username);
+        socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', data.oldName + ' hat seinen Namen in '+ socket.username+' geändert.');
+        socket.emit('update:chat', 'SERVER', 'Neuer Nutzername - '+socket.username);
         io.sockets.emit('update:user', usernames);
-    })
+    });
     
     //clients send a new message
     socket.on('send:msg', function(data) {
@@ -137,7 +137,7 @@ io.on('connection', function (socket) {
         var msg = 'remove';
         socket.broadcast.to(socket.room).emit('update:member', msg);
         //global text echo that user left
-        socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', socket.username + ' has disconnected.');
+        socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', socket.username + ' hat den Raum verlassen.');
     });
     
     //change peer id
@@ -214,10 +214,10 @@ io.on('connection', function (socket) {
             socket.join(roomId);
             
             //send client affirmation message
-            socket.emit('update:chat', 'SERVER', 'you have connected to room '+roomId);
+            socket.emit('update:chat', 'SERVER', 'Sie sind dem Raum '+roomId+' beigetreten');
 
             //tell members of the room that a new client has connected
-            socket.broadcast.to(roomId).emit('update:chat', 'SERVER', socket.username + ' has connected');
+            socket.broadcast.to(roomId).emit('update:chat', 'SERVER', socket.username + ' ist beigetreten.');
             log('The socket room: ', socket.room);
         } else if(failed){
             //the requested room was full
@@ -235,7 +235,7 @@ io.on('connection', function (socket) {
             rooms.push(roomId);
             socket.room = roomId;
             socket.join(roomId);
-            socket.emit('update:chat', 'SERVER', 'you have connected to room '+roomId);
+            socket.emit('update:chat', 'SERVER', 'Sie haben sich mit dem Raum '+roomId+' verbunden.');
             var roomnr = io.sockets.adapter.rooms[socket.room];
             var rl = roomnr.length;
             log('number of users in the room', rl);
@@ -260,11 +260,11 @@ io.on('connection', function (socket) {
         log('User in room: ', roomUsers); 
         //leave the old room before connecting to the new one
         socket.leave(oldRoom);
-        socket.broadcast.to(oldRoom).emit('update:chat', 'SERVER', socket.username + ' has switched to another room');
+        socket.broadcast.to(oldRoom).emit('update:chat', 'SERVER', socket.username + ' hat in einen anderen Raum gewechselt');
     });
     
     socket.on('send:socketId', function(id) {
         //do send your real  Id
         socket.broadcast.to(socket.room).emit('receive:socketId', id);
-    })
+    });
 });

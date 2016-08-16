@@ -1,17 +1,39 @@
 body{ 
-    padding-top:70px; 
+    padding-top:78px; 
 }
 .container {
-
 }
-.jumbotron{ 
 
-    border-radius:40px;
+.jumbotron{ 
+    border-radius: 40px;
     border-bottom: 0;
 
 }
-.navbar{
-    margin-bottom: : 50px !important;
+
+.navbar {min-height:50px !important;
+margin-bottom: : 50px !important;}
+
+
+
+.navbar-collapse {
+  text-align: center;
+}
+
+.pull-left {
+    padding-top: 7px;
+}
+
+.navbar-nav {
+    display:inline-block;
+    float: none;
+}
+
+.navbar-text {
+    text-align: center;
+    font-size: 17px !important;
+    font-weight: bold;
+    display:inline-block;
+    color: floralwhite !important;
 }
 
 .localVideo {
@@ -30,6 +52,13 @@ body{
     max-width: inherit;
     max-height: inherit;
     z-index: -1;
+}
+
+.fsVideo {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
 }
 
 .table{
@@ -89,27 +118,6 @@ body{
     display: block;
 }
 
-.btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
-}
-
-.overlayButtons {
-    position: absolute;
-    top: auto;
-    z-index: 1;
-}
-
-.imgbtn {
-    font-size:80px; 
-    vertical-align: top:
-}
-
 .spinner {
     width: 100px;
     height: 100px;
@@ -126,7 +134,7 @@ body{
     opacity: 0.6;
     position: absolute;
     top: 0;
-    left: 0;
+    left: -50px;
     z-index: 10;
     
     -webkit-animation: sk-bounce 3.0s infinite ease-in-out;
@@ -156,10 +164,10 @@ body{
 .overlay {
   opacity: .75;
   background-color: #000;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
   position: absolute;
-  z-index: 5;
+  z-index: 8;
   margin: -20px -20px;
   border-radius: 3px;
 }
@@ -168,7 +176,7 @@ body{
   text-align: center;
   position: absolute;
   top: calc(50% + 100px);
-  left: calc(50% - 50px);
+  left: calc(50% - 55px);
   color: #fff;
   z-index: 10;
 }
@@ -181,7 +189,7 @@ filter: progid:DXImageTransform.Microsoft.gradient
 border: 1px solid #fff;
 -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
 -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
 border-radius: 25px;
 -webkit-border-radius: 25px;
 -moz-border-radius: 25px;
@@ -201,11 +209,11 @@ background-color: #2C3E50;
 btn-img:hover {
 background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
 background-image: -webkit-gradient(linear,left top,left bottom,
-    color-stop(0, #ffffff),color-stop(1, #eeeeee));
+                  color-stop(0, #ffffff),color-stop(1, #eeeeee));
 filter: progid:DXImageTransform.Microsoft.gradient
     (startColorStr='#ffffff', EndColorStr='#eeeeee');
 -ms-filter: "progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#ffffff', EndColorStr='#eeeeee')";
+    (startColorStr='#ffffff', EndColorStr='#eeeeee');
 color: #000;
 display: block;
 }
@@ -215,7 +223,7 @@ btn-img:active {
     filter: progid:DXImageTransform.Microsoft.gradient
     (startColorStr='#dbdbdb', EndColorStr='#ffffff');
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#dbdbdb', EndColorStr='#ffffff')";
+    (startColorStr='#dbdbdb', EndColorStr='#ffffff');
     text-shadow: 0px -1px 0 rgba(255, 255, 255, 0.5);
     margin-top: 1px;
 }
@@ -238,9 +246,24 @@ btn-img:active {
     background-size: 100%;
 }
 
-.tes {
+.fs:before {
     display: block;
-    width: 35px;
-    height: 35px;
-    content: "";
+    width: 30px;
+    height: 30px;
+    content: " ";
+    background: url(../asset/2FullScreen%20On%20GHOST.png) no-repeat 0 0;
+    background-size: 100%;
+}
+
+.zoll {
+    padding-right: 20px;
+    padding-top: 15px;
+}
+.tomed {
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.btn-full {
+    z-index: 2147483647;
 }
