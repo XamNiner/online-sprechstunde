@@ -1,19 +1,25 @@
-body{ 
-    padding-top:78px; 
+.zoll {
+    padding-right: 20px;
+    padding-top: 15px;
 }
+
+.tomed {
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
 .container {
+    padding-top: 70px;
 }
 
 .jumbotron{ 
     border-radius: 40px;
     border-bottom: 0;
-
 }
 
 .navbar {min-height:50px !important;
-margin-bottom: : 50px !important;}
-
-
+margin-bottom: : 50px !important;
+}
 
 .navbar-collapse {
   text-align: center;
@@ -55,21 +61,19 @@ margin-bottom: : 50px !important;}
 }
 
 .fsVideo {
-    position: absolute;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    border: 2px solid red;
+    border-radius: 20px;
+    max-width: inherit;
+    max-height: inherit;
 }
 
-.table{
-    margin-bottom: 30px;
-    padding: 0;
+.gradient {
+    background: #2C3E50;
+    background: -webkit-linear-gradient(to right, #a1d3b0, #f6f1d3);
+    background: -moz-linear-gradient(to right, #a1d3b0, #f6f1d3);
+    background: linear-gradient(to right, #2C3E50, #f6f1d3);
 }
-
-.gi-3x {
-    font-size: 2em;
-}
-
 
 .bottomleft {
     position:absolute; bottom:0px;  margin-bottom:7px; left: 0px;
@@ -96,26 +100,6 @@ margin-bottom: : 50px !important;}
 .desc {
     padding: 15px;
     text-align: center;
-}
-
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
 }
 
 .spinner {
@@ -203,6 +187,11 @@ color: floralwhite;
 font-size: 25px;
 font-weight: bold;
 background-color: #2C3E50;   
+    z-index: 45;
+}
+
+.btn-pad {
+    position: absolute;
 }
 
 
@@ -255,15 +244,47 @@ btn-img:active {
     background-size: 100%;
 }
 
-.zoll {
-    padding-right: 20px;
-    padding-top: 15px;
-}
-.tomed {
-    padding-left: 10px;
-    padding-top: 15px;
+.no-fs:before {
+    display: block;
+    width: 30px;
+    height: 30px;
+    content: " ";
+    background: url(../asset/2FullScreen%20Off%20GHOST.png) no-repeat 0 0;
+    background-size: 100%;
 }
 
-.btn-full {
-    z-index: 2147483647;
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: aqua;
 }
+
+.fscreen {
+    padding-top: 68px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin:0;
+    left: 0px;
+    top: 0px;
+    z-index: -1000;
+    overflow: hidden;
+}
+
+.localcont {
+   width: 20%;
+    height: 20%;
+    position: absolute;
+    margin:0;
+    left: 0px;
+    bottom: 0px;
+    z-index: 12; 
+    border-width: thick;
+    border-color: aqua;
+    border-radius: 20px;
+}
+
+.

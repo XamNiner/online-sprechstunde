@@ -30,7 +30,8 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         oldId: currentRoom
     }
     
-    var localVideoR = document.getElementById('localVideoR'), 
+    var localVideoR = document.getElementById('localVideoR'),
+        localFSVideo= document.getElementById('localFSVideo'),
         remoteVideoR = document.getElementById('remoteVideoR'),
         remoteFSVideo= document.getElementById('remoteFSVideo'),
         localStream,
@@ -54,18 +55,20 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         utilityService.changeName(vm.userName, vm.newName);    
     }
     
-    function goFullScreen(){
-        console.log('-WAITING-');
+    function goFullScreen(fs){
         console.log('Going fullScreen');
-
-       // utilityService.goFullScreen(remoteVideoR);
-        vm.fs = true;
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        console.log('Width - '+w+' - Height '+h);
-        //remoteVideoR.style.width = w+'px';
-        //remoteVideoR.style.height = h+'px';
-        remoteFSVideo.src = window.URL.createObjectURL(remoteStream);
+        //standard fullscreen video option
+        //utilityService.goFullScreen(remoteVideoR);
+        
+        //custom fullscreen with navbar on top
+        if (fs) {
+            vm.fs = false;
+            remoteFSVideo.stop;
+        }else {
+            vm.fs = true;
+            remoteFSVideo.src = window.URL.createObjectURL(remoteStream);
+            localFSVideo.src = window.URL.createObjectURL(localStream);
+        }
     }
     
     //display information panel
@@ -193,10 +196,17 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
             vm.hasPeerToCall = true;
             vm.waitAnswer= false;
          } else if(msg === 'bye' && isStarted) {
-             console.log('Init remote hangup>>>>>>>>>>>>>>>>');
+             console.log('Init remote hangup>>>>>>');
              pc = signalingService.remoteHangup(pc, remoteStream, remoteVideoR);
              resetChannelState();
              remoteVideoR.src = '';
+         } else if (msg === 'quit') {
+             if(isStarted) {
+               console.log('Quit remote hangup>>>>>');
+                pc = signalingService.remoteHangup(pc, remoteStream, remoteVideoR);
+                resetChannelState();
+                remoteVideoR.src = '';  
+             }
              vm.hasPeerToCall = false;
          }
     });
@@ -341,11 +351,12 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         vm.picSendReady = false; 
         vm.hasPeerToCall = true;
         vm.waitAnswer= false;
+        vm.fs = false;
     }
     
     //end any calls when reloading or closing the page
     window.onbeforeunload = function() {
-        var message = 'bye';
+        var message = 'quit';
         signalingService.sendPrivateMessage(message);
     }
     

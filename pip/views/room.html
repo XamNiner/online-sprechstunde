@@ -9,7 +9,7 @@
 </div> 
 
 <!-- disable/hide everything when switching to fullscreen -->  
-<div ng-hide="room.fs">
+<div ng-hide="room.fs" ng-disable="room.fs">
 <!-- Waiting for peer to accept connection -->  
 <div ng-show="!room.noMedia">
     <load-spinner name="connectSpinner" show="room.waitAnswer">
@@ -22,6 +22,7 @@
     </load-spinner>  
 </div>
 
+    <br>
 <!-- MAIN Video Elements -->  
 <div class="container" ng-cloak ng-show="!room.noMedia">
 <div class="row">
@@ -35,7 +36,7 @@
     <!-- Remote Video -->  
         <div ng-show="room.inCall">
         <div class="embed-responsive embed-responsive-16by9">
-        <video id="remoteVideoR" autoplay controls class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
+        <video id="remoteVideoR" autoplay class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
             <button class="btn-img aaa" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.hangUp()" ng-disabled="!room.inCall"></button>
             <button class="btn-img fs" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.goFullScreen()" ng-disabled="!room.inCall"></button>
         </div>
@@ -130,6 +131,12 @@
 </div><!-- container -->
 </div>
 
-<div ng-show="room.fs">
-    <video id="remoteFSVideo" autoplay controls class="fsVideo" poster="../asset/stand.jpg" width="600px" height="470px">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
+<div class="fscreen" ng-show="room.fs">
+    <div class="embed-responsive embed-responsive-16by9">
+        <button class="btn-img no-fs btn-pad" uib-popover="Switch off FullScreen mode" popover-trigger="'mouseenter'"ng-click="room.goFullScreen(room.fs)" ng-disabled="!room.inCall"></button>
+    <video id="remoteFSVideo" autoplay poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
+        <div class="localcont">
+            <video id="localFSVideo" autoplay poster="../asset/stand.jpg" class="fsVideo"> Kein Video verfügbar!</video>
+        </div>
+    </div>
 </div>
