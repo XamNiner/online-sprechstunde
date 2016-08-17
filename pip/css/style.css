@@ -71,9 +71,11 @@
 
 .gradient {
     background: #2C3E50;
-    background: -webkit-linear-gradient(to right, #a1d3b0, #f6f1d3);
-    background: -moz-linear-gradient(to right, #a1d3b0, #f6f1d3);
-    background: linear-gradient(to right, #2C3E50, #f6f1d3);
+    background: -webkit-linear-gradient(to left, #a1d3b0, #f6f1d3);
+    background: -moz-linear-gradient(to left, #a1d3b0, #f6f1d3);
+    background: linear-gradient(to left, #2C3E50, #f6f1d3);
+    border-radius: 20px;
+    z-index: -1;
 }
 
 .bottomleft {
@@ -83,15 +85,17 @@
 .thumbs {
     position: relative;
     display: inline-block;
+    z-index: 2;
 }
 
 .thumbs-content {
     display: none;
     position: absolute;
+    top: -250px;
     background-color: #f9f9f9;
     min-width: 300px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 700;
+    z-index: 100;
 }
 
 .thumbs:hover .thumbs-content {
@@ -300,4 +304,8 @@ btn-img:active {
 
 .table {
     margin-bottom: 30px;
+}
+
+.input-group {
+    z-index: 1 !important;   
 }

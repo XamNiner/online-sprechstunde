@@ -1,7 +1,7 @@
 (function() {
 'use strict';
     
-angular.module('chatApp').service('photoService', function() {
+angular.module('chatApp').service('photoService', function(utilityService) {
     var vm = this;
     
     //snap a picture of your own camera
@@ -53,7 +53,7 @@ angular.module('chatApp').service('photoService', function() {
         
         //display all transfered images as thumbnails with attached time codes
         var urls = canvas.toDataURL(),
-            timeStamp = createTimeStamp(),
+            timeStamp = utilityService.createTimeStamp();
             data = {
                 url: urls,
                 time: timeStamp
@@ -70,11 +70,5 @@ angular.module('chatApp').service('photoService', function() {
         console.log('Height '+h+' Width '+w); 
     }
     
-    //local date and time DD-MM-YYYY-HH:MM:SS 
-    function createTimeStamp() {
-         var ndate = new Date();
-        var timeStamp = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
-        return timeStamp;
-    }
 }) 
 })()

@@ -52,5 +52,12 @@ angular.module('chatApp').service('utilityService', function(socket) {
     vm.getFSState= function() {
         return fullScreenState;
     }
+    
+    //local date and time DD-MM-YYYY-HH:MM:SS 
+    vm.createTimeStamp = function() {
+        var ndate = new Date();
+        var timeStamp = ('0' + ndate.getDate()).slice(-2) + '-' + ('0' + (ndate.getMonth() + 1)).slice(-2) + '-' +  ndate.getFullYear() + '-' + ('0' + ndate.getHours()).slice(-2) + ':' + ('0' + ndate.getMinutes()).slice(-2) + ':' + ('0' + ndate.getSeconds()).slice(-2);
+        return timeStamp;
+    }
 }) 
 })()

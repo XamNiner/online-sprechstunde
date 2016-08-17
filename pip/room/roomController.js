@@ -366,8 +366,9 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     //-----------------------------------------------------------------
     
     var photo = document.getElementById('photo');
+    var photoBackup = document.getElementById('photoBackup');
     var photoContext = photo.getContext('2d'); 
-    var phCo = photo.getContext('2d');
+    var phCo = photoBackup.getContext('2d');
     //set picture dimensions
     var photoContextW,
         photoContextH;
@@ -387,7 +388,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     vm.sendPhoto = sendPhoto;
     
     function snapPhoto() {
-        vm.snapImg = photoService.snap(localVideoR, photo, phCo);
+        vm.snapImg = photoService.snap(localVideoR, photoBackup, phCo);
         vm.picReady = true;
         if (vm.inCall) {
             vm.picSendReady = true;
@@ -397,8 +398,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     function sendPhoto() {
         //check if in call and a photo is available
         if (vm.picReady && vm.inCall) {
-            photoContext = phCo;
-            photoService.sendPhoto(photo, photoContext, dataChannel);
+            photoService.sendPhoto(photoBackup, phCo, dataChannel);
         }
     }
     

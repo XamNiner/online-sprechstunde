@@ -42,10 +42,11 @@
         </div>
         </div>
         <hr>
-        <div class="row">
+        <div class="row gradient">
         <div ng-show="room.inCall">
             <div ng-hide="!room.gumedia">
                 <canvas id="photo"></canvas>
+                <canvas id="photoBackup"></canvas>
             </div>
         <!-- Photo Display -->      
         <div class="col-md-3" class="pics" ng-show="room.inCall">
@@ -115,7 +116,7 @@
         </div>
         <br>
         <!-- Change Name -->  
-        <div class="input-group input-group-lg text-center">
+        <div class="input-group input-group-lg text-center ff">
             <input type="text" class="form-control" placeholder="Nutzername..." ng-model="room.newName">
             <span class="input-group-btn">
             <button class="btn btn-primary" type="button" ng-click="room.setName()">
