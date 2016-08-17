@@ -1,7 +1,7 @@
 (function() {
 'use strict';
     
-angular.module('chatApp').controller('MainCtrl', function($scope, $routeParams, $location, socket, modalService, photoService, signalingService, peerService, spinnerService) {
+angular.module('chatApp').controller('MainCtrl', function($scope, $routeParams, $location, socket, modalService, photoService, signalingService, peerService, spinnerService, utilityService) {
     var vm = this;
     vm.name;
     vm.roomId = $routeParams.roomId;

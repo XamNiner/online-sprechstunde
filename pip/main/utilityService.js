@@ -4,7 +4,8 @@
 angular.module('chatApp').service('utilityService', function(socket) {
     //service providing some utility functions
     var vm = this;
-    var state = false; 
+    var fullScreenState = false; 
+    
     
     //change the username
     vm.changeName = function(oldName, newName) {
@@ -16,6 +17,7 @@ angular.module('chatApp').service('utilityService', function(socket) {
         socket.emit('newname:user', data);
     }
     
+    //standard fullscreen video implementation
     vm.goFullScreen = function(video) {
         if (video.requestFullscreen) {
             console.log('Standard Full');
@@ -33,6 +35,22 @@ angular.module('chatApp').service('utilityService', function(socket) {
             console.log('MS Full');
             video.msRequestFullscreen();
         }
+    }
+    
+    vm.newFullScreen = function(fsState, localVideo, remoteVideo, localStream, remoteStream) {
+        if (fsState) {
+            localVideo.src = localStream;
+            remoteVideo.src = remoteStream;
+        } else {
+            localVideo.stop;
+            remoteVideo.stop;
+        }
+        fullScreenState = fsState;
+    }
+    
+    //not used right now
+    vm.getFSState= function() {
+        return fullScreenState;
     }
 }) 
 })()

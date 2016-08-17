@@ -43,24 +43,24 @@
         </div>
         <hr>
         <div class="row">
-        <div ng-show="room.picReady">
+        <div ng-show="room.inCall">
             <div ng-hide="!room.gumedia">
                 <canvas id="photo"></canvas>
             </div>
         <!-- Photo Display -->      
-        <div class="col-md-3" ng-show="room.picReady">
-            <p>Screenshot</p>
-            <div class="dropdown thumbs"> 
-            <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="test" width="100" height="100">
+        <div class="col-md-3" class="pics" ng-show="room.inCall">
+            <p><strong>Screenshot</strong></p>
+            <div class="dropdown thumbs" ng-show="room.picReady"> 
+            <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="Screen" width="100" height="100">
             <div class="dropdown-content thumbs-content">
-                <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="test" width="640" height="480">
-            <div class="desc">Snapshot</div>
+                <img ng-src="{{room.snapImg}}" class="img-responsive thumbnail" alt="Screen" width="640" height="480">
+            <div class="desc">Screenshot</div>
             </div>
         </div>
         </div>
         <div class="col-md-9">
         <div id="incoming">
-            <p>Übertragene Bilder:</p>
+            <p><strong>Erhaltene Bilder:</strong></p>
             <div ng-repeat="nails in room.imgContainer track by $index" ng-switch="$index%4">
                 <div class="row" ng-switch-when="0">
                     <div class="col-md-3">
@@ -134,7 +134,7 @@
 <div class="fscreen" ng-show="room.fs">
     <div class="embed-responsive embed-responsive-16by9">
         <button class="btn-img no-fs btn-pad" uib-popover="Switch off FullScreen mode" popover-trigger="'mouseenter'"ng-click="room.goFullScreen(room.fs)" ng-disabled="!room.inCall"></button>
-    <video id="remoteFSVideo" autoplay poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
+        <video id="remoteFSVideo" autoplay poster="../asset/stand.jpg" class="rfs">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
         <div class="localcont">
             <video id="localFSVideo" autoplay poster="../asset/stand.jpg" class="fsVideo"> Kein Video verfügbar!</video>
         </div>

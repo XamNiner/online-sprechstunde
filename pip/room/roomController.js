@@ -63,11 +63,12 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         //custom fullscreen with navbar on top
         if (fs) {
             vm.fs = false;
-            remoteFSVideo.stop;
+            utilityService.newFullScreen(vm.fs, localFSVideo, remoteFSVideo);
         }else {
             vm.fs = true;
-            remoteFSVideo.src = window.URL.createObjectURL(remoteStream);
-            localFSVideo.src = window.URL.createObjectURL(localStream);
+            var ls = window.URL.createObjectURL(localStream),
+                rs = window.URL.createObjectURL(remoteStream);
+            utilityService.newFullScreen(vm.fs, localFSVideo, remoteFSVideo, ls, rs);
         }
     }
     

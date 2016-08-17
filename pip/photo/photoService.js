@@ -47,7 +47,7 @@ angular.module('chatApp').service('photoService', function() {
         canvas.classList.add('incomingPhoto');
         var context = canvas.getContext('2d');
         var img = context.createImageData(photo.width, photo.height);
-        console.log('This is the image data '+data.size);
+        console.log('This is the image data '+data.length);
         img.data.set(data);
         context.putImageData(img, 0, 0);
         

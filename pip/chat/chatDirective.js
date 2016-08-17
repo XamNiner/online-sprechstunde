@@ -28,7 +28,7 @@ angular.module('chatApp').directive('chatField', function(socket) {
     
     function updateScroll(){
     var element = document.getElementById('chat');
-    element.scrollTop = element.scrollHeight;
+        element.scrollTop = element.scrollHeight;
     }
     };
     
