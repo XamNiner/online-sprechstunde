@@ -27,10 +27,6 @@
   text-align: center;
 }
 
-.pull-left {
-    padding-top: 7px;
-}
-
 .navbar-nav {
     display:inline-block;
     float: none;
@@ -198,6 +194,12 @@ z-index: 45;
 
 .btn-pad {
     position: absolute;
+    left: 35px;
+    top: 12px;
+}
+.btn-img[disabled] { 
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 btn-img:hover {
@@ -309,4 +311,7 @@ btn-img:active {
 
 .input-group {
     z-index: 1 !important;   
+}
+.embed-responsive {
+
 }

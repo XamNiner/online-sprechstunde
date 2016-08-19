@@ -26,8 +26,7 @@
 <!-- MAIN Video Elements -->  
 <div class="container" ng-cloak ng-show="!room.noMedia">
 <div class="row">
-    <div class="col-md-8 stackem">
-
+    <div class="col-md-8 ">
         <div ng-show="room.hasPeerToCall">
             <button class="btn btn-primary btn-lg center-block" type="button" ng-click="room.startPeerConnection()" ng-disabled="!room.canCall">
                 Nutzer anrufen<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
@@ -36,9 +35,9 @@
     <!-- Remote Video -->  
         <div ng-show="room.inCall">
         <div class="embed-responsive embed-responsive-16by9">
-        <video id="remoteVideoR" autoplay class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
-            <button class="btn-img aaa" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.hangUp()" ng-disabled="!room.inCall"></button>
-            <button class="btn-img fs" uib-popover="End the Call" popover-trigger="'mouseenter'"ng-click="room.goFullScreen()" ng-disabled="!room.inCall"></button>
+            <video id="remoteVideoR" autoplay class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
+            <button class="btn-img aaa" uib-popover="Auflegen" popover-trigger="'mouseenter'"ng-click="room.hangUp()" ng-disabled="!room.inCall" popover-append-to-body="true"></button>
+            <button class="btn-img fs" uib-popover="Vollbild Modus" popover-trigger="'mouseenter'"ng-click="room.goFullScreen()" ng-disabled="!room.inCall" popover-append-to-body="true"></button>
         </div>
         </div>
         <hr>
@@ -111,8 +110,8 @@
     <div class="col-md-4">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="localVideoR" autoplay muted controls class="localVideo">Could not init the local video display</video>
-            <button class="btn btn-img photo" uib-popover="Snap a photo" popover-trigger="'mouseenter'" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto"></button>
-            <button class="btn-img" uib-popover="Send a Photo" popover-trigger="'mouseenter'" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady"><span class="glyphicon glyphicon-send"></span></button>
+            <button class="btn btn-img photo" uib-popover="Bild Aufnehmen" popover-trigger="'mouseenter'" ng-click="room.snapPhoto()" ng-disabled="!room.canPhoto" popover-append-to-body="true"></button>
+            <button class="btn-img" uib-popover="Bild Verschicken" popover-trigger="'mouseenter'" ng-click="room.sendPhoto()" ng-disabled="!room.picSendReady" popover-append-to-body="true"><span class="glyphicon glyphicon-send"></span></button>
         </div>
         <br>
         <!-- Change Name -->  
@@ -130,11 +129,11 @@
     </div><!-- col-md-4 -->
 </div><!-- row -->    
 </div><!-- container -->
-</div>
+</div><!-- hide if fullscreen -->
 
 <div class="fscreen" ng-show="room.fs">
     <div class="embed-responsive embed-responsive-16by9">
-        <button class="btn-img no-fs btn-pad" uib-popover="Switch off FullScreen mode" popover-trigger="'mouseenter'"ng-click="room.goFullScreen(room.fs)" ng-disabled="!room.inCall"></button>
+        <button class="btn-img no-fs btn-pad" uib-popover="Minimieren" popover-trigger="'mouseenter'"ng-click="room.goFullScreen(room.fs)" ng-disabled="!room.inCall" popover-append-to-body="true"></button>
         <video id="remoteFSVideo" autoplay poster="../asset/stand.jpg" class="rfs">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
         <div class="localcont">
             <video id="localFSVideo" autoplay poster="../asset/stand.jpg" class="fsVideo"> Kein Video verfügbar!</video>

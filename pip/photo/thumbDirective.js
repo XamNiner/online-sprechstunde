@@ -4,7 +4,6 @@
 angular.module('chatApp').directive('thumbDisplay', function() {
     return {
         restrict: 'EA',
-        replace: true,
         scope: {
             imgSrc: '@',
             time: '@'
