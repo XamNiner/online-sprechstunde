@@ -9,6 +9,7 @@ var express = require('express'),
 var port = process.env.PORT || 8000;
 
 server.listen(port, function () {
+  console.log('Server listening at port %d', port);
 });
 
 // Routing
@@ -48,6 +49,7 @@ io.on('connection', function (socket) {
     //client emits add:user to add new user to the room
     socket.on('add:user', function(username) {
         userNumber++;
+        console.log('added new user');
         //store the name
         socket.username = username;
         
@@ -85,6 +87,7 @@ io.on('connection', function (socket) {
         usernames[data.newName] = data.newName;
         //set new name for socket
         socket.username = data.newName;
+        console.log('Socket name '+socket.username);
         //inform other peers that user changed his name
         socket.broadcast.to(socket.room).emit('update:chat', 'SERVER', data.oldName + ' hat seinen Namen in '+ socket.username+' geändert.');
         socket.emit('update:chat', 'SERVER', 'Neuer Nutzername - '+socket.username);
@@ -120,6 +123,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function() {
         log('User disconnected');
         //delete the assigned username from the list of users
+        console.log(socket.username + ' has disconnected.');
         delete usernames[socket.username];
         //update username list
         io.sockets.emit('update:user', usernames);
