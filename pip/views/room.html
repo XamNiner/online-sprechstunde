@@ -22,7 +22,6 @@
     </load-spinner>  
 </div>
 
-    <br>
 <!-- MAIN Video Elements -->  
 <div class="container" ng-cloak ng-show="!room.noMedia">
 <div class="row">
@@ -32,7 +31,7 @@
                 Nutzer anrufen<img src="../asset/2Phone%20Up%20GHOST.png" width="50" class="imgbtn"/>
             </button>
         </div>
-    <!-- Remote Video -->  
+        <!-- Remote Video -->  
         <div ng-show="room.inCall">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="remoteVideoR" autoplay class="remoteVideo" poster="../asset/stand.jpg">Kein Video verfügbar! Bitte nutzen Sie einen anderen Browser.</video>
@@ -42,7 +41,7 @@
         </div>
         <hr>
         <div class="row gradient">
-        <div ng-show="room.inCall">
+        <div >
             <div ng-hide="!room.gumedia">
                 <canvas id="photo"></canvas>
                 <canvas id="photoBackup"></canvas>
@@ -118,7 +117,7 @@
         <div class="input-group input-group-lg text-center ff">
             <input type="text" class="form-control" placeholder="Nutzername..." ng-model="room.newName">
             <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="room.setName()">
+            <button class="btn btn-primary" type="button" ng-click="room.setName()" uib-popover="Namen Ändern" popover-trigger="'mouseenter'" popover-append-to-body="true">
                 Name
             </button>
             </span>

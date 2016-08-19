@@ -1,6 +1,6 @@
 .zoll {
-    padding-right: 25px;
-    padding-top: 10px;
+    padding-right: 20px;
+    padding-top: 5px;
     padding-bottom: 5px;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .container {
-    padding-top: 70px;
+    padding-top: 60px;
 }
 
 .jumbotron{ 
@@ -20,7 +20,7 @@
 
 .navbar {
     min-height:50px !important;
-
+    height:  50px;
 }
 
 .navbar-collapse {
@@ -30,13 +30,14 @@
 .navbar-nav {
     display:inline-block;
     float: none;
+    line-height: 10px;
 }
 
 .navbar-text {
     text-align: center;
-    font-size: 17px !important;
+    font-size: 20px !important;
     font-weight: bold;
-    display:inline-block;
+
     color: floralwhite !important;
 }
 
@@ -168,15 +169,6 @@
 }
 
 .btn-img {
-filter: progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#ffffff', EndColorStr='#dbdbdb');
--ms-filter: "progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#ffffff', EndColorStr='#dbdbdb')";
-border: 1px solid #fff;
--moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
--webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
-border-radius: 25px;
 -webkit-border-radius: 25px;
 -moz-border-radius: 25px;
 padding: 5px 5px;
@@ -202,32 +194,6 @@ z-index: 45;
     cursor: not-allowed;
 }
 
-btn-img:hover {
-    background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
-    background-image: -webkit-gradient(linear,left top,left bottom,
-                  color-stop(0, #ffffff),color-stop(1, #eeeeee));
-filter: progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#ffffff', EndColorStr='#eeeeee');
--ms-filter: "progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#ffffff', EndColorStr='#eeeeee');
-color: #000;
-display: block;
-}
-
-btn-image:hover {
-    background-color: aqua;
-}
-
-btn-img:active {
-    background-image: url(../asset/2Phone%20Down%20GHOST.png);
-    filter: progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#dbdbdb', EndColorStr='#ffffff');
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient
-    (startColorStr='#dbdbdb', EndColorStr='#ffffff');
-    text-shadow: 0px -1px 0 rgba(255, 255, 255, 0.5);
-    margin-top: 1px;
-}
-
 .aaa:before{
     display: block;
     width: 35px;
@@ -237,6 +203,18 @@ btn-img:active {
     background-size: 100%;
 }
 
+.aaa:hover{
+  border:1px solid #502c2c;
+    background-color: #b30000;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b30000), color-stop(100%, #2C3E50));
+    background-image: -webkit-linear-gradient(top, #2C3E50, #b30000);
+    background-image: -moz-linear-gradient(top, #2C3E50, #b30000);
+    background-image: -ms-linear-gradient(top, #2C3E50, #b30000);
+    background-image: -o-linear-gradient(top, #2C3E50, #b30000);
+    background-image: linear-gradient(top, #b30000, #133d5b);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#b30000, endColorstr=#2C3E50);  
+}
+
 .photo:before{
     display: block;
     width: 32px;
@@ -244,6 +222,18 @@ btn-img:active {
     content: " ";
     background: url(../asset/2Foto%20GHOST.png) no-repeat 0 0;
     background-size: 100%;
+}
+
+.photo:hover, .no-fs:hover, .fs:hover{
+    border:1px solid #502c2c;
+    background-color: #3286c1;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3286c1), color-stop(100%, #2C3E50));
+    background-image: -webkit-linear-gradient(bottom, #2C3E50, #3286c1);
+    background-image: -moz-linear-gradient(bottom, #2C3E50, #3286c1);
+    background-image: -ms-linear-gradient(bottom, #2C3E50, #3286c1);
+    background-image: -o-linear-gradient(bottom, #2C3E50, #3286c1);
+    background-image: linear-gradient(bottom, #3286c1, #133d5b);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#3286c1, endColorstr=#2C3E50); 
 }
 
 .fs:before {
@@ -275,7 +265,7 @@ btn-img:active {
 
 .fscreen {
     position: absolute;
-    padding-top: 68px;
+    padding-top: 50px;
     width: 100%;
     height: 100%;
     z-index: -1000;
@@ -292,8 +282,8 @@ btn-img:active {
     height: 20%;
     position: absolute;
     margin:0;
-    left: 10px;
-    bottom: 20px;
+    left: 40px;
+    bottom: 50px;
     z-index: 12; 
     border-width: thick;
     border-color: aqua;
@@ -311,7 +301,4 @@ btn-img:active {
 
 .input-group {
     z-index: 1 !important;   
-}
-.embed-responsive {
-
 }
