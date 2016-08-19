@@ -1,11 +1,12 @@
 .zoll {
-    padding-right: 20px;
-    padding-top: 15px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
 .tomed {
-    padding-left: 10px;
-    padding-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .container {
