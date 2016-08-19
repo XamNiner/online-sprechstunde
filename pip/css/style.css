@@ -169,6 +169,7 @@
 }
 
 .btn-img {
+border-radius: 25px;
 -webkit-border-radius: 25px;
 -moz-border-radius: 25px;
 padding: 5px 5px;
@@ -225,7 +226,7 @@ z-index: 45;
 }
 
 .photo:hover, .no-fs:hover, .fs:hover{
-    border:1px solid #502c2c;
+    border:1px solid #3286c1;
     background-color: #3286c1;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3286c1), color-stop(100%, #2C3E50));
     background-image: -webkit-linear-gradient(bottom, #2C3E50, #3286c1);
