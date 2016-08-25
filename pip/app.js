@@ -11,9 +11,7 @@
 angular
     .module('chatApp', ['ui.bootstrap','ngRoute'])
 
-    .config(['$routeProvider', '$locationProvider', 
-        function($routeProvider,$locationProvider) {
-        //$locationProvider.html5Mode(true);
+    .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/room/:roomId', {
                 templateUrl: 'views/room.html',
