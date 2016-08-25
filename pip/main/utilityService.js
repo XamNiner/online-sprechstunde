@@ -15,6 +15,7 @@ angular.module('chatApp').service('utilityService', function(socket) {
             newName: newName
         }
         socket.emit('newname:user', data);
+        return newName;
     }
     
     //standard fullscreen video implementation

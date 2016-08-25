@@ -52,7 +52,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     
     //change the chat name
     function setName() {
-        utilityService.changeName(vm.userName, vm.newName);    
+       vm.userName = utilityService.changeName(vm.userName, vm.newName);    
     }
     
     function goFullScreen(fs){
@@ -161,7 +161,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         console.log('Got Id from your peer'+id);    
         vm.peerId = id;
         if (owner) {
-            socket.emit('send:socketId', vm.clientId);
+           // socket.emit('send:socketId', vm.clientId);
         }
     });
     
@@ -495,8 +495,11 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         socket.emit('check:room', oldUrl);
         vm.oldUrl = oldUrl;
         vm.newUrl = newUrl;
-        if(pc !== 'null') {
-           // hangUp();
+        if(pc !== null) {
+            //end the peers current call - disable call button for callee
+            console.log('This is the pc: '+pc);
+            hangUp();
+            signalingService.sendPrivateMessage('quit');
         }
     }
     
@@ -507,6 +510,11 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         console.log('What happens after: '+url+' - old: '+oldUrl+' state: '+state);
         routeService.setReadyState(true);
     }
+    
+    //stop all socket listeners manually
+    $scope.$on('$destroy', function() {
+            socket.removeAllListeners();
+        });
 })    
     
 })()    

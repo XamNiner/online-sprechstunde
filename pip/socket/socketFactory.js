@@ -23,6 +23,9 @@ angular.module('chatApp')
           }
         });
       })
+    },
+    removeAllListeners: function() {
+        socket.removeAllListeners();
     }
   };
 });
