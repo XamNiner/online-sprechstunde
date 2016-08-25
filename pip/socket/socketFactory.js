@@ -26,7 +26,11 @@ angular.module('chatApp')
     },
     removeAllListeners: function() {
         socket.removeAllListeners();
-    }
+    },
+    connect: function() {
+        console.log("connecting!!!");
+        socket = io.connect;
+    } 
   };
 });
     

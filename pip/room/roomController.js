@@ -509,12 +509,13 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         console.log('LOCATION CHANGE');
         console.log('What happens after: '+url+' - old: '+oldUrl+' state: '+state);
         routeService.setReadyState(true);
+        socket.connect();
     }
     
     //stop all socket listeners manually
     $scope.$on('$destroy', function() {
-            alert("DESTROY");
-            //socket.removeAllListeners();
+            //alert("DESTROY");
+            socket.removeAllListeners();
         });
 })    
     
