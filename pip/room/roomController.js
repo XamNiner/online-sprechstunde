@@ -501,7 +501,6 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
             hangUp();
             signalingService.sendPrivateMessage('quit');
         }
-        socket.removeAllListeners();
     }
     
     $scope.$on('$locationChangeSuccess', afterRoomChange);
@@ -514,7 +513,13 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     
     //stop all socket listeners manually
     $scope.$on('$destroy', function() {
-        
+        var sock = socket.getSocket();
+        sock.off('join:room');
+        sock.off('message');
+        sock.off('receive:socketId');
+        sock.off('msg:room');
+        sock.off('rtc:room');
+        socket.setSocket(sock);
     });
 })    
     

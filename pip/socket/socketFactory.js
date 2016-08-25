@@ -26,7 +26,13 @@ angular.module('chatApp')
     },
     removeAllListeners: function() {
         socket.removeAllListeners();
-    }
+    },
+    getSocket: function() {
+        return socket;
+    }, 
+    setSocket: function(skt) {
+          socket = skt;
+    }  
   };
 });
     
