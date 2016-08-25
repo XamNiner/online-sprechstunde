@@ -514,7 +514,7 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
     //stop all socket listeners manually
     $scope.$on('$destroy', function() {
             alert("DESTROY");
-            socket.removeAllListeners();
+            //socket.removeAllListeners();
         });
 })    
     
