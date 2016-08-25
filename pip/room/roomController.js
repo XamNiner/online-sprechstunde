@@ -503,23 +503,9 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         }
     }
     
-    $scope.$on('$locationChangeSuccess', afterRoomChange);
-    
-    function afterRoomChange(event, url, oldUrl, state, oldState) {
-        console.log('LOCATION CHANGE');
-        console.log('What happens after: '+url+' - old: '+oldUrl+' state: '+state);
-        routeService.setReadyState(true);
-    }
-    
     //stop all socket listeners manually
     $scope.$on('$destroy', function() {
-        var sock = socket.getSocket();
-        sock.off('join:room');
-        sock.off('message');
-        sock.off('receive:socketId');
-        sock.off('msg:room');
-        sock.off('rtc:room');
-        socket.setSocket(sock);
+        socket.removeAllListeners();
     });
 })    
     
