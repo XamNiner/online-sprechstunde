@@ -1,7 +1,7 @@
 (function() {
 'use strict';
     
-angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $routeParams, $location, socket, peerService, signalingService, modalService, routeService, photoService, utilityService, spinnerService) {
+angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $routeParams, $location, socket, peerService, signalingService, modalService, photoService, utilityService, spinnerService) {
     var vm = this;
     vm.userName;
     vm.newName;
@@ -163,6 +163,10 @@ angular.module('chatApp').controller('RoomCtrl', function($rootScope, $scope, $r
         if (owner) {
            // socket.emit('send:socketId', vm.clientId);
         }
+    });
+    
+    socket.on('no:peer', function() {
+        vm.hasPeerToCall = false;
     });
     
     socket.on('msg:room', function(msg) {

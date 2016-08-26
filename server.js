@@ -259,6 +259,7 @@ io.on('connection', function (socket) {
         //leave the old room before connecting to the new one
         socket.leave(oldRoom);
         socket.broadcast.to(oldRoom).emit('update:chat', 'SERVER', socket.username + ' hat in einen anderen Raum gewechselt');
+        socket.broadcast.to(oldRoom).emit('no:peer');
     });
     
     socket.on('send:socketId', function(id) {
